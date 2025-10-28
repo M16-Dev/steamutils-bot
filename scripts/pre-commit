@@ -1,0 +1,30 @@
+#!/bin/sh
+
+echo "🔍 Running pre-commit checks..."
+
+# Format check
+echo "📝 Checking formatting..."
+deno fmt --check
+if [ $? -ne 0 ]; then
+  echo "❌ Formatting check failed. Run 'deno task format' to fix."
+  exit 1
+fi
+
+# Lint
+echo "🔎 Running linter..."
+deno lint
+if [ $? -ne 0 ]; then
+  echo "❌ Linting failed. Fix the issues before committing."
+  exit 1
+fi
+
+# Tests
+echo "🧪 Running tests..."
+deno test
+if [ $? -ne 0 ]; then
+  echo "❌ Tests failed. Fix the tests before committing."
+  exit 1
+fi
+
+echo "✅ All checks passed!"
+exit 0
