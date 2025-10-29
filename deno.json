@@ -6,17 +6,18 @@
         "format": "deno fmt",
         "format:check": "deno fmt --check",
         "lint": "deno lint",
-        "test": "deno test",
+        "test": "deno test --allow-net --allow-env --env",
         "check": "deno task format:check && deno task lint && deno task test",
         "install-hooks": "deno run --allow-read --allow-write scripts/install-hooks.ts"
     },
     "imports": {
         "@std/assert": "jsr:@std/assert@1",
         "@std/fs": "jsr:@std/fs@1",
-        "discord.js": "npm:discord.js@^14.24.1"
+        "discord.js": "npm:discord.js@^14.24.1",
+        "steamid": "npm:steamid@^2.1.0"
     },
     "fmt": {
-        "lineWidth": 120,
+        "lineWidth": 160,
         "indentWidth": 4
     }
 }

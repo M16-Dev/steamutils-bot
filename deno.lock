@@ -5,8 +5,10 @@
     "jsr:@std/fs@1": "1.0.19",
     "jsr:@std/internal@^1.0.10": "1.0.12",
     "jsr:@std/internal@^1.0.12": "1.0.12",
+    "jsr:@std/internal@^1.0.9": "1.0.12",
     "jsr:@std/path@^1.1.1": "1.1.2",
-    "npm:discord.js@^14.24.1": "14.24.1"
+    "npm:discord.js@^14.24.1": "14.24.1",
+    "npm:steamid@^2.1.0": "2.1.0"
   },
   "jsr": {
     "@std/assert@1.0.15": {
@@ -18,6 +20,7 @@
     "@std/fs@1.0.19": {
       "integrity": "051968c2b1eae4d2ea9f79a08a3845740ef6af10356aff43d3e2ef11ed09fb06",
       "dependencies": [
+        "jsr:@std/internal@^1.0.9",
         "jsr:@std/path"
       ]
     },
@@ -148,6 +151,9 @@
     "magic-bytes.js@1.12.1": {
       "integrity": "sha512-ThQLOhN86ZkJ7qemtVRGYM+gRgR8GEXNli9H/PMvpnZsE44Xfh3wx9kGJaldg314v85m+bFW6WBMaVHJc/c3zA=="
     },
+    "steamid@2.1.0": {
+      "integrity": "sha512-ndt1cvuuSC+i8fcxVsmeyRlgGsR1QsoAuIXz+eabj8/Y4GIWE2+mgHA7Hys61JDHOxttfWtXHtN2m5TNYTlORg=="
+    },
     "ts-mixer@6.0.4": {
       "integrity": "sha512-ufKpbmrugz5Aou4wcr5Wc1UUFWOLhq+Fm6qa6P0w0K5Qw2yhaUoiWszhCVuNQyNwrlGiscHOmqYoAox1PtvgjA=="
     },
@@ -168,7 +174,8 @@
     "dependencies": [
       "jsr:@std/assert@1",
       "jsr:@std/fs@1",
-      "npm:discord.js@^14.24.1"
+      "npm:discord.js@^14.24.1",
+      "npm:steamid@^2.1.0"
     ]
   }
 }
