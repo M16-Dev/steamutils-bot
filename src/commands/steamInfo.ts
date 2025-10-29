@@ -60,4 +60,4 @@ export default {
 
         await interaction.reply({ embeds: [steamProfileEmbed(profile)] });
     },
-} as Command;
+} satisfies Command;
