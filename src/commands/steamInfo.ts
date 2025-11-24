@@ -1,5 +1,5 @@
 import { Command } from "../types/command.ts";
-import { MessageFlags, SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, MessageFlags, SlashCommandBuilder } from "discord.js";
 import { getPlayerSummary, resolveVanityUrl } from "../services/steam.ts";
 import { steamProfileComponent } from "../utils/components.ts";
 import SteamID from "steamid";
@@ -14,7 +14,7 @@ export default {
                 .setDescription("The Steam user to look up. Can be a username, SteamID or URL.")
                 .setRequired(true)
         ),
-    async execute(interaction) {
+    async execute(interaction: ChatInputCommandInteraction): Promise<void> {
         let input = interaction.options.getString("user", true);
 
         if (input.includes("steamcommunity.com/")) {
@@ -36,26 +36,29 @@ export default {
         if (!steamId) {
             const resolvedId = await resolveVanityUrl(input);
             if (!resolvedId) {
-                return await interaction.reply({
+                await interaction.reply({
                     content: `Could not find Steam user: ${input}`,
                     flags: MessageFlags.Ephemeral,
                 });
+                return;
             }
             steamId = tryParseSteamId(resolvedId);
             if (!steamId) {
-                return await interaction.reply({
+                await interaction.reply({
                     content: `Invalid Steam ID returned: ${resolvedId}`,
                     flags: MessageFlags.Ephemeral,
                 });
+                return;
             }
         }
 
         const profile = await getPlayerSummary(steamId.getSteamID64());
         if (!profile) {
-            return await interaction.reply({
+            await interaction.reply({
                 content: `Could not fetch profile for: ${input}`,
                 flags: MessageFlags.Ephemeral,
             });
+            return;
         }
 
         await interaction.reply({
@@ -63,4 +66,4 @@ export default {
             flags: MessageFlags.IsComponentsV2,
         });
     },
-} satisfies Command;
+} satisfies Command<ChatInputCommandInteraction>;

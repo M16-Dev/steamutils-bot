@@ -2,7 +2,7 @@ import type { MessageComponentInteraction, ModalSubmitInteraction } from "discor
 
 export type ComponentInteraction = MessageComponentInteraction | ModalSubmitInteraction;
 
-export interface Component {
+export interface Component<T extends ComponentInteraction = ComponentInteraction> {
     customId: string;
-    execute: (interaction: ComponentInteraction) => Promise<void>;
+    execute: (interaction: T) => Promise<void>;
 }

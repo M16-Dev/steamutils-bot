@@ -32,4 +32,4 @@ export default {
             flags: MessageFlags.Ephemeral | MessageFlags.IsComponentsV2,
         });
     },
-} satisfies Command;
+} satisfies Command<ChatInputCommandInteraction>;

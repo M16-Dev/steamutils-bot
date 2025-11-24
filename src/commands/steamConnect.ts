@@ -1,4 +1,4 @@
-import { MessageFlags, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, MessageFlags, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { Command } from "../types/command.ts";
 import { steamConnectComponent } from "../utils/components.ts";
 import { config } from "../../config.ts";
@@ -32,7 +32,7 @@ export default {
                 .setDescription("Custom label next to the button. Psst... you can use markdown here!")
                 .setRequired(false)
         ),
-    async execute(interaction) {
+    async execute(interaction: ChatInputCommandInteraction): Promise<void> {
         const ip = interaction.options.getString("ip", true);
         const port = interaction.options.getInteger("port", true);
         const password = interaction.options.getString("password", false);
@@ -76,4 +76,4 @@ export default {
             flags: MessageFlags.IsComponentsV2,
         });
     },
-} satisfies Command;
+} satisfies Command<ChatInputCommandInteraction>;

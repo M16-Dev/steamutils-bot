@@ -1,7 +1,6 @@
-import type { ChatInputCommandInteraction, SlashCommandBuilder, SlashCommandOptionsOnlyBuilder } from "discord.js";
+import type { CommandInteraction, ContextMenuCommandBuilder, SlashCommandBuilder, SlashCommandOptionsOnlyBuilder } from "discord.js";
 
-export interface Command {
-    data: SlashCommandBuilder | SlashCommandOptionsOnlyBuilder;
-    // deno-lint-ignore no-explicit-any
-    execute: (interaction: ChatInputCommandInteraction) => Promise<any>;
+export interface Command<T extends CommandInteraction = CommandInteraction> {
+    data: SlashCommandBuilder | SlashCommandOptionsOnlyBuilder | ContextMenuCommandBuilder;
+    execute: (interaction: T) => Promise<void>;
 }
