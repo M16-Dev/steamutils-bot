@@ -14,7 +14,8 @@
         "@std/assert": "jsr:@std/assert@1",
         "@std/fs": "jsr:@std/fs@1",
         "discord.js": "npm:discord.js@^14.24.1",
-        "steamid": "npm:steamid@^2.1.0"
+        "steamid": "npm:steamid@^2.1.0",
+        "zod": "https://deno.land/x/zod@v3.23.8/mod.ts"
     },
     "fmt": {
         "lineWidth": 160,

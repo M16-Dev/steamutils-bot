@@ -5,6 +5,7 @@ import { loadCommands } from "./loaders/command-loader.ts";
 import { loadEvents } from "./loaders/event-loader.ts";
 import { loadComponents } from "./loaders/component-loader.ts";
 import { logger } from "./utils/logger.ts";
+import { config } from "../config.ts";
 
 export class Bot extends Client {
     public commands: Collection<string, Command>;
@@ -30,9 +31,6 @@ export class Bot extends Client {
     async start(): Promise<void> {
         await this.initialize();
 
-        const token = Deno.env.get("TOKEN");
-        if (!token) throw new Error("TOKEN environment variable is not set");
-
-        await this.login(token);
+        await this.login(config.token);
     }
 }

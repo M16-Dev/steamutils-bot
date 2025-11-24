@@ -1,6 +1,7 @@
 import { logger } from "../utils/logger.ts";
 import SteamID from "steamid";
 import type { SteamPlayer } from "../types/steam.ts";
+import { config } from "../../config.ts";
 
 export async function resolveVanityUrl(vanityUrl: string): Promise<string | null> {
     if (!vanityUrl || vanityUrl.trim() === "") {
@@ -9,7 +10,7 @@ export async function resolveVanityUrl(vanityUrl: string): Promise<string | null
     }
 
     const response = await fetch(
-        `https://api.steampowered.com/ISteamUser/ResolveVanityURL/v1/?key=${Deno.env.get("STEAM_API_KEY")}&vanityurl=${encodeURIComponent(vanityUrl)}`,
+        `https://api.steampowered.com/ISteamUser/ResolveVanityURL/v1/?key=${config.steamApiKey}&vanityurl=${encodeURIComponent(vanityUrl)}`,
     );
 
     if (!response.ok) {
@@ -36,7 +37,7 @@ export async function getPlayerSummary(steamId: string): Promise<SteamPlayer | n
     }
 
     const response = await fetch(
-        `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${Deno.env.get("STEAM_API_KEY")}&steamids=${steamId}`,
+        `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${config.steamApiKey}&steamids=${steamId}`,
     );
 
     if (!response.ok) {

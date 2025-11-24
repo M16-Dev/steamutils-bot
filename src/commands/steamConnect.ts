@@ -1,8 +1,7 @@
 import { MessageFlags, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { Command } from "../types/command.ts";
 import { steamConnectComponent } from "../utils/components.ts";
-
-import config from "../../config.json" with { type: "json" };
+import { config } from "../../config.ts";
 
 export default {
     data: new SlashCommandBuilder()
@@ -38,11 +37,11 @@ export default {
         const port = interaction.options.getInteger("port", true);
         const password = interaction.options.getString("password", false);
         const text = interaction.options.getString("text", false) ?? undefined;
-        const res = await fetch(`${config.apiBaseUrl}/codes`, {
+        const res = await fetch(`${config.apiUrl}/codes`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${Deno.env.get("API_KEY")}`,
+                "Authorization": `Bearer ${config.apiKey}`,
             },
             body: JSON.stringify({ guildId: interaction.guildId, ip, port, password }),
         });

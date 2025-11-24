@@ -1,8 +1,7 @@
 import type { SteamPlayer } from "../types/steam.ts";
 import type { APIContainerComponent } from "discord.js";
 import SteamID from "steamid";
-
-import config from "../../config.json" with { type: "json" };
+import { config } from "../../config.ts";
 
 export const steamProfileComponent = (player: SteamPlayer) => {
     const steamId = new SteamID(player.steamid);
@@ -57,7 +56,7 @@ export const steamConnectComponent = (code: string, text?: string) => {
                 accessory: {
                     type: 2,
                     style: 5,
-                    url: `${config.apiBaseUrl}/connect/${code}`,
+                    url: `${config.apiUrl}/connect/${code}`,
                     label: "Connect",
                 },
             },
