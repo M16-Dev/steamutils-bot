@@ -67,7 +67,7 @@ export const steamConnectComponent = (code: string, text?: string) => {
     } satisfies APIContainerComponent;
 };
 
-export const linkAccountsPersonalComponent = (token: string) => {
+export const createConnectionPersonalComponent = (token: string) => {
     return {
         type: 17,
         components: [
@@ -82,7 +82,7 @@ export const linkAccountsPersonalComponent = (token: string) => {
                 accessory: {
                     type: 2,
                     style: 5,
-                    url: `${config.apiUrl}/auth/steam?token=${encodeURIComponent(token)}`,
+                    url: `${config.apiUrl}/connections/create?token=${encodeURIComponent(token)}`,
                     label: "Link Accounts",
                 } satisfies APIButtonComponentWithURL,
             } satisfies APISectionComponent,
@@ -96,7 +96,7 @@ Don't share this link! It contains your private token!`,
     } satisfies APIContainerComponent;
 };
 
-export const linkAccountsPublicComponent = () => {
+export const createConnectionPublicComponent = () => {
     return {
         type: 17,
         components: [
@@ -116,7 +116,7 @@ export const linkAccountsPublicComponent = () => {
                     {
                         type: 2,
                         style: ButtonStyle.Success,
-                        custom_id: `link_accounts_button`,
+                        custom_id: `create_connection_button`,
                         label: "Link Accounts",
                         emoji: { name: "🔗" },
                     } satisfies APIButtonComponentWithCustomId,

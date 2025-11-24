@@ -1,6 +1,6 @@
 import { ButtonInteraction, ChatInputCommandInteraction, MessageFlags } from "discord.js";
 import { create, getNumericDate } from "djwt";
-import { linkAccountsPersonalComponent } from "../utils/components.ts";
+import { createConnectionPersonalComponent } from "../utils/components.ts";
 import { config } from "../../config.ts";
 
 const key = await crypto.subtle.importKey(
@@ -11,7 +11,7 @@ const key = await crypto.subtle.importKey(
     ["sign"],
 );
 
-export const linkAccountsReply = async (interaction: ButtonInteraction | ChatInputCommandInteraction): Promise<void> => {
+export const createConnectionHandler = async (interaction: ButtonInteraction | ChatInputCommandInteraction): Promise<void> => {
     const token = await create(
         { alg: "HS256", typ: "JWT" },
         {
@@ -23,7 +23,7 @@ export const linkAccountsReply = async (interaction: ButtonInteraction | ChatInp
     );
 
     await interaction.reply({
-        components: [linkAccountsPersonalComponent(token)],
+        components: [createConnectionPersonalComponent(token)],
         flags: MessageFlags.Ephemeral | MessageFlags.IsComponentsV2,
     });
 };
