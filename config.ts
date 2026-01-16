@@ -8,6 +8,8 @@ const rawConfig = {
     apiUrl: Deno.env.get("API_URL") as string | undefined,
     steamApiKey: Deno.env.get("STEAM_API_KEY") as string | undefined,
     jwtSecret: Deno.env.get("JWT_SECRET") as string | undefined,
+    rateLimitMax: Deno.env.get("RATE_LIMIT_MAX") ?? "30",
+    rateLimitWindow: Deno.env.get("RATE_LIMIT_WINDOW") ?? "60000",
 };
 
 const ConfigSchema = z.object({
@@ -18,6 +20,8 @@ const ConfigSchema = z.object({
     apiUrl: z.string().url().regex(/^https?:\/\/.+/),
     steamApiKey: z.string(),
     jwtSecret: z.string(),
+    rateLimitMax: z.coerce.number().min(1),
+    rateLimitWindow: z.coerce.number().min(1000),
 });
 
 const parseResult = ConfigSchema.safeParse(rawConfig);
