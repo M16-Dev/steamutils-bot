@@ -9,6 +9,7 @@ import {
 } from "discord.js";
 import { Component } from "../../types/component.ts";
 import { config } from "../../../config.ts";
+import { db } from "../../services/db.ts";
 
 export default {
     customId: "delete_connection_button",
@@ -30,6 +31,11 @@ export default {
                 flags: MessageFlags.Ephemeral,
             });
             return;
+        }
+
+        const verifiedRoleId = await db.getVerifiedRole(guildId);
+        if (verifiedRoleId) {
+            await interaction.member.roles.remove(verifiedRoleId).catch(() => {});
         }
 
         const container = interaction.message.components[0].toJSON() as APIContainerComponent;
