@@ -1,8 +1,8 @@
 {
     "tasks": {
-        "dev": "deno run --watch -A --env src/index.ts",
-        "start": "deno run --allow-net --allow-env --allow-read --env src/index.ts",
-        "deploy": "deno run --allow-net --allow-env --allow-read --env src/deploy-commands.ts",
+        "dev": "deno run --watch -A --env --unstable-kv src/index.ts",
+        "start": "deno run --allow-net --allow-env --allow-read --env --unstable-kv src/index.ts",
+        "deploy": "deno run --allow-net --allow-env --allow-read --env --unstable-kv src/deploy-commands.ts",
         "format": "deno fmt",
         "format:check": "deno fmt --check",
         "lint": "deno lint",
