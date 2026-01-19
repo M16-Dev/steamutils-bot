@@ -1,5 +1,6 @@
 import type { Command } from "../types/command.ts";
 import { type ChatInputCommandInteraction, MessageFlags, RoleSelectMenuInteraction, SlashCommandBuilder } from "discord.js";
+import { db } from "../services/db.ts";
 
 const configComponent = async (interaction: ChatInputCommandInteraction) => {
     const verifiedRole = await db.getVerifiedRole(interaction.guildId as string);
@@ -53,6 +54,7 @@ export default {
             switch (componentInteraction.customId) {
                 case "config_verified_role": {
                     const selectedRoleId = (componentInteraction as RoleSelectMenuInteraction).values[0];
+                    db.setVerifiedRole(interaction.guildId as string, selectedRoleId);
                     break;
                 }
             }
