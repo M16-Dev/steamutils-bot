@@ -5,6 +5,7 @@ import {
     APISectionComponent,
     ButtonInteraction,
     ButtonStyle,
+    GuildMemberRoleManager,
     MessageFlags,
 } from "discord.js";
 import { Component } from "../../types/component.ts";
@@ -34,7 +35,7 @@ export default {
         }
 
         const verifiedRoleId = await db.getVerifiedRole(guildId);
-        if (verifiedRoleId) {
+        if (verifiedRoleId && interaction.member?.roles instanceof GuildMemberRoleManager) {
             await interaction.member.roles.remove(verifiedRoleId).catch(() => {});
         }
 

@@ -1,5 +1,12 @@
 import type { Command } from "../types/command.ts";
-import { type ChatInputCommandInteraction, MessageFlags, PermissionFlagsBits, RoleSelectMenuInteraction, SlashCommandBuilder } from "discord.js";
+import {
+    type ChatInputCommandInteraction,
+    MessageComponentInteraction,
+    MessageFlags,
+    PermissionFlagsBits,
+    RoleSelectMenuInteraction,
+    SlashCommandBuilder,
+} from "discord.js";
 import { db } from "../services/db.ts";
 
 const configComponent = async (interaction: ChatInputCommandInteraction) => {
@@ -51,7 +58,7 @@ export default {
             return;
         }
 
-        response.resource.message.createMessageComponentCollector({}).on("collect", async (componentInteraction) => {
+        response.resource.message.createMessageComponentCollector({}).on("collect", async (componentInteraction: MessageComponentInteraction) => {
             switch (componentInteraction.customId) {
                 case "config_verified_role": {
                     const selectedRoleId = (componentInteraction as RoleSelectMenuInteraction).values[0];
