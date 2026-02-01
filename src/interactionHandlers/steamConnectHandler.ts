@@ -7,7 +7,7 @@ export const createSteamConnectHandler = async (interaction: ChatInputCommandInt
     const port = interaction.options.getInteger("port", true);
     const password = interaction.options.getString("password", false);
     const text = interaction.options.getString("text", false) ?? undefined;
-    const res = await fetch(`${config.apiUrl}/codes`, {
+    const res = await fetch(`${config.apiUrl}/api/v1/codes`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -48,7 +48,7 @@ export const createSteamConnectHandler = async (interaction: ChatInputCommandInt
 };
 
 export const manageSteamConnectHandler = async (interaction: ChatInputCommandInteraction): Promise<void> => {
-    const response = await fetch(`${config.apiUrl}/codes/guild/${interaction.guildId}`, {
+    const response = await fetch(`${config.apiUrl}/api/v1/codes/guild/${interaction.guildId}`, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${config.apiKey}`,

@@ -12,7 +12,7 @@ const key = await crypto.subtle.importKey(
 );
 
 export const createConnectionHandler = async (interaction: ButtonInteraction | ChatInputCommandInteraction): Promise<void> => {
-    const response = await fetch(`${config.apiUrl}/connections/${interaction.user.id}`, {
+    const response = await fetch(`${config.apiUrl}/api/v1/connections/${interaction.user.id}`, {
         headers: { "Authorization": `Bearer ${config.apiKey}` },
     });
 
@@ -57,7 +57,7 @@ interface ConnectionRow {
     created_at: string;
 }
 export const manageConnectionsHandler = async (interaction: ButtonInteraction | ChatInputCommandInteraction): Promise<void> => {
-    const response = await fetch(`${config.apiUrl}/connections/${interaction.user.id}`, {
+    const response = await fetch(`${config.apiUrl}/api/v1/connections/${interaction.user.id}`, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${config.apiKey}`,

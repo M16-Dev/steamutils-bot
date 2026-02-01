@@ -15,7 +15,7 @@ export default {
     async execute(interaction: ButtonInteraction): Promise<void> {
         const [, code] = interaction.customId.split(";");
 
-        const response = await fetch(`${config.apiUrl}/codes/${code}`, {
+        const response = await fetch(`${config.apiUrl}/api/v1/codes/${code}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",

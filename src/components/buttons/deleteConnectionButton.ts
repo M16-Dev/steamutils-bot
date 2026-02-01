@@ -17,7 +17,7 @@ export default {
     async execute(interaction: ButtonInteraction): Promise<void> {
         const [, guildId] = interaction.customId.split(";");
 
-        const response = await fetch(`${config.apiUrl}/connections/`, {
+        const response = await fetch(`${config.apiUrl}/api/v1/connections`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
