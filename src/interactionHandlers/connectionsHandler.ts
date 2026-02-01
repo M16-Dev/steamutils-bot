@@ -1,5 +1,5 @@
 import { ButtonInteraction, ChatInputCommandInteraction, MessageFlags } from "discord.js";
-import { create, getNumericDate } from "djwt";
+import { create, getNumericDate } from "@wok/djwt";
 import { createConnectionPersonalComponent, manageConnectionsComponent } from "../utils/components.ts";
 import { config } from "../../config.ts";
 

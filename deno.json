@@ -15,8 +15,8 @@
         "@std/fs": "jsr:@std/fs@1",
         "discord.js": "npm:discord.js@^14.24.1",
         "steamid": "npm:steamid@^2.1.0",
-        "zod": "https://deno.land/x/zod@v3.23.8/mod.ts",
-        "djwt": "https://deno.land/x/djwt@v2.8/mod.ts"
+        "@zod/zod": "jsr:@zod/zod@^4.3.6",
+        "@wok/djwt": "jsr:@wok/djwt@^3.0.2"
     },
     "fmt": {
         "lineWidth": 160,
