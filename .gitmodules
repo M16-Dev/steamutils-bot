@@ -1,0 +1,3 @@
+[submodule "steamutils-backend"]
+	path = steamutils-backend
+	url = https://github.com/M16-Dev/steamutils-backend.git
