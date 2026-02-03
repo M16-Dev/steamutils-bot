@@ -14,8 +14,8 @@ import {
     ButtonStyle,
 } from "discord.js";
 import SteamID from "steamid";
-import { config } from "../../config.ts";
 import { getPlayerSummary } from "../services/steam.ts";
+import client from "../services/backendClient.ts";
 
 export const steamProfileComponent = (player: SteamPlayer) => {
     const steamId = new SteamID(player.steamid);
@@ -61,7 +61,7 @@ export const steamConnectComponent = (code: string, text?: string) => {
                 accessory: {
                     type: 2,
                     style: 5,
-                    url: `${config.apiUrl}/connect/${code}`,
+                    url: `${client.connect[":code"].$url({ param: { code } })}`,
                     label: "Connect",
                 } satisfies APIButtonComponentWithURL,
             } satisfies APISectionComponent,
@@ -84,7 +84,7 @@ export const createConnectionPersonalComponent = (token: string) => {
                 accessory: {
                     type: 2,
                     style: 5,
-                    url: `${config.apiUrl}/connections/create?token=${encodeURIComponent(token)}`,
+                    url: `${client.connections.create.$url({ query: { token: encodeURIComponent(token) } })}`,
                     label: "Link Accounts",
                 } satisfies APIButtonComponentWithURL,
             } satisfies APISectionComponent,

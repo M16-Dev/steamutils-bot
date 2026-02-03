@@ -2,6 +2,7 @@ import { ButtonInteraction, ChatInputCommandInteraction, MessageFlags } from "di
 import { create, getNumericDate } from "@wok/djwt";
 import { createConnectionPersonalComponent, manageConnectionsComponent } from "../utils/components.ts";
 import { config } from "../../config.ts";
+import client from "../services/backendClient.ts";
 
 const key = await crypto.subtle.importKey(
     "raw",
@@ -12,8 +13,8 @@ const key = await crypto.subtle.importKey(
 );
 
 export const createConnectionHandler = async (interaction: ButtonInteraction | ChatInputCommandInteraction): Promise<void> => {
-    const response = await fetch(`${config.apiUrl}/api/v1/connections/${interaction.user.id}`, {
-        headers: { "Authorization": `Bearer ${config.apiKey}` },
+    const response = await client.api.v1.connections[":discordId"].$get({
+        param: { discordId: interaction.user.id },
     });
 
     if (!response.ok) {
@@ -57,12 +58,10 @@ interface ConnectionRow {
     created_at: string;
 }
 export const manageConnectionsHandler = async (interaction: ButtonInteraction | ChatInputCommandInteraction): Promise<void> => {
-    const response = await fetch(`${config.apiUrl}/api/v1/connections/${interaction.user.id}`, {
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${config.apiKey}`,
-        },
+    const response = await client.api.v1.connections[":discordId"].$get({
+        param: { discordId: interaction.user.id },
     });
+
     if (!response.ok) {
         await interaction.reply({
             content: `Failed to fetch your connections. Please try again later.`,

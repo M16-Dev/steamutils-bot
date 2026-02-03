@@ -9,21 +9,16 @@ import {
     MessageFlags,
 } from "discord.js";
 import { Component } from "../../types/component.ts";
-import { config } from "../../../config.ts";
 import { db } from "../../services/db.ts";
+import client from "../../services/backendClient.ts";
 
 export default {
     customId: "delete_connection_button",
     async execute(interaction: ButtonInteraction): Promise<void> {
         const [, guildId] = interaction.customId.split(";");
 
-        const response = await fetch(`${config.apiUrl}/api/v1/connections`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${config.apiKey}`,
-            },
-            body: JSON.stringify({ discordId: interaction.user.id, guildId }),
+        const response = await client.api.v1.connections.$delete({
+            json: { discordId: interaction.user.id, guildId },
         });
 
         if (!response.ok) {

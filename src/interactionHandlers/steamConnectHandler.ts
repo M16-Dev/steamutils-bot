@@ -1,23 +1,19 @@
 import { ChatInputCommandInteraction, MessageFlags } from "discord.js";
 import { manageGameServersComponent, steamConnectComponent } from "../utils/components.ts";
 import { config } from "../../config.ts";
+import client from "../services/backendClient.ts";
 
 export const createSteamConnectHandler = async (interaction: ChatInputCommandInteraction): Promise<void> => {
     const ip = interaction.options.getString("ip", true);
     const port = interaction.options.getInteger("port", true);
     const password = interaction.options.getString("password", false);
     const text = interaction.options.getString("text", false) ?? undefined;
-    const res = await fetch(`${config.apiUrl}/api/v1/codes`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${config.apiKey}`,
-        },
-        body: JSON.stringify({ guildId: interaction.guildId, ip, port, password }),
+    const res = await client.api.v1.codes.$post({
+        json: { guildId: interaction.guildId!, ip, port, password: password ?? null },
     });
     const data = await res.json();
 
-    if (res.status === 400) {
+    if ((res.status as number) === 400) {
         await interaction.reply({
             content: `❌ Provided data is invalid.`,
             flags: MessageFlags.Ephemeral,
@@ -27,7 +23,7 @@ export const createSteamConnectHandler = async (interaction: ChatInputCommandInt
 
     if (res.status === 402) {
         await interaction.reply({
-            content: `❌ ${data.error}`,
+            content: `❌ ${(data as { error: string }).error}`,
             flags: MessageFlags.Ephemeral,
         });
         return;
@@ -42,17 +38,16 @@ export const createSteamConnectHandler = async (interaction: ChatInputCommandInt
     }
 
     await interaction.reply({
-        components: [steamConnectComponent(data.code, text)],
+        components: [steamConnectComponent((data as { code: string }).code, text)],
         flags: MessageFlags.IsComponentsV2,
     });
 };
 
 export const manageSteamConnectHandler = async (interaction: ChatInputCommandInteraction): Promise<void> => {
-    const response = await fetch(`${config.apiUrl}/api/v1/codes/guild/${interaction.guildId}`, {
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${config.apiKey}`,
-        },
+    const response = await client.api.v1.codes.guild[":guildId"].$get({
+        param: { guildId: interaction.guildId! },
+    }, {
+        headers: { "Authorization": `Bearer ${config.apiKey}` },
     });
 
     if (!response.ok) {

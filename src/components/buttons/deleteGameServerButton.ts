@@ -8,20 +8,14 @@ import {
     MessageFlags,
 } from "discord.js";
 import { Component } from "../../types/component.ts";
-import { config } from "../../../config.ts";
+import client from "../../services/backendClient.ts";
 
 export default {
     customId: "delete_game_server_button",
     async execute(interaction: ButtonInteraction): Promise<void> {
         const [, code] = interaction.customId.split(";");
 
-        const response = await fetch(`${config.apiUrl}/api/v1/codes/${code}`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${config.apiKey}`,
-            },
-        });
+        const response = await client.api.v1.codes[":code"].$delete({ param: { code } });
 
         if (!response.ok) {
             await interaction.reply({
