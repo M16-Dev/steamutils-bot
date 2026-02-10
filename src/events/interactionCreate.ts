@@ -1,18 +1,6 @@
-import { Collection } from "discord.js";
 import type { Event } from "../types/event.ts";
 import type { Bot } from "../bot.ts";
 import { logger } from "../utils/logger.ts";
-import { config } from "../../config.ts";
-
-const rateLimitHistory = new Collection<string, number[]>();
-
-// Periodically clear old rate limit data
-setInterval(() => {
-    const now = Date.now();
-    const windowStart = now - config.rateLimitWindow;
-    // Remove users whose latest interaction is older than the window
-    rateLimitHistory.sweep((timestamps) => timestamps[timestamps.length - 1] < windowStart);
-}, 5 * 60 * 1000);
 
 export default {
     name: "interactionCreate",
@@ -48,28 +36,6 @@ export default {
                 }
             }
         } else if (interaction.isModalSubmit() || interaction.isMessageComponent()) {
-            // Rate limiting
-            const now = Date.now();
-            const windowStart = now - config.rateLimitWindow;
-
-            const userHistory = rateLimitHistory.get(interaction.user.id) || [];
-            const recentInteractions = userHistory.filter((t) => t > windowStart);
-
-            if (recentInteractions.length >= config.rateLimitMax) {
-                const oldestInteraction = recentInteractions[0];
-                const expirationTime = Math.round((oldestInteraction + config.rateLimitWindow) / 1000);
-
-                await interaction.reply({
-                    content: `You are interacting too fast! Please wait and try again <t:${expirationTime}:R>.`,
-                    ephemeral: true,
-                });
-                return;
-            }
-
-            recentInteractions.push(now);
-            rateLimitHistory.set(interaction.user.id, recentInteractions);
-
-            // Handle interaction
             const customId = interaction.customId.split(";")[0];
             const component = client.components.get(customId);
 
