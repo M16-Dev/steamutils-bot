@@ -90,9 +90,9 @@ export const createConnectionPersonalComponent = (token: string) => {
             } satisfies APISectionComponent,
             {
                 type: 10,
-                content: `>>> You will be redirected to Steam login page to give us your public steam ID.
-Link is valid for 10 minutes.
-Don't share this link! It contains your private token!`,
+                content: `>>> - You will be redirected to official Steam login page (steamcommunity.com)
+- We only get your public Steam ID from Steam
+- Link expires in 10 minutes. Do not share this link!`,
             } satisfies APITextDisplayComponent,
         ] satisfies APIComponentInContainer[],
     } satisfies APIContainerComponent;
