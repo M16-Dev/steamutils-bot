@@ -37,6 +37,8 @@ export default {
                 }
             }
         } else if (interaction.isModalSubmit() || interaction.isMessageComponent()) {
+            if (interaction.customId.startsWith("$")) return;
+
             const customId = interaction.customId.split(";")[0];
             const component = client.components.get(customId);
 

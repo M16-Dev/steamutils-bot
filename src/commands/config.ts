@@ -27,7 +27,7 @@ const configComponent = async (interaction: ChatInputCommandInteraction) => {
                     {
                         type: 6,
                         placeholder: "Select a role or leave blank",
-                        custom_id: "config_verified_role",
+                        custom_id: "$config_verified_role",
                         min_values: 0,
                         max_values: 1,
                         default_values: verifiedRole ? [{ id: verifiedRole, type: "role" }] : [],
@@ -60,7 +60,7 @@ export default {
 
         response.resource.message.createMessageComponentCollector({}).on("collect", async (componentInteraction: MessageComponentInteraction) => {
             switch (componentInteraction.customId) {
-                case "config_verified_role": {
+                case "$config_verified_role": {
                     const selectedRoleId = (componentInteraction as RoleSelectMenuInteraction).values[0];
                     db.setVerifiedRole(interaction.guildId as string, selectedRoleId);
                     break;
