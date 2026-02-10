@@ -8,6 +8,7 @@ import {
     SlashCommandBuilder,
 } from "discord.js";
 import { db } from "../services/db.ts";
+import RateLimiter from "../utils/rateLimiter.ts";
 
 const configComponent = async (interaction: ChatInputCommandInteraction) => {
     const verifiedRole = await db.getVerifiedRole(interaction.guildId as string);
@@ -58,7 +59,9 @@ export default {
             return;
         }
 
-        response.resource.message.createMessageComponentCollector({}).on("collect", async (componentInteraction: MessageComponentInteraction) => {
+        response.resource.message.createMessageComponentCollector({
+            filter: async (i) => !(await RateLimiter.handleRateLimit(i)),
+        }).on("collect", async (componentInteraction: MessageComponentInteraction) => {
             switch (componentInteraction.customId) {
                 case "$config_verified_role": {
                     const selectedRoleId = (componentInteraction as RoleSelectMenuInteraction).values[0];

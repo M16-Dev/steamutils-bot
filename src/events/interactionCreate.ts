@@ -2,6 +2,7 @@ import type { Event } from "../types/event.ts";
 import type { Bot } from "../bot.ts";
 import { logger } from "../utils/logger.ts";
 import { MessageFlags } from "discord.js";
+import RateLimiter from "../utils/rateLimiter.ts";
 
 export default {
     name: "interactionCreate",
@@ -10,6 +11,8 @@ export default {
         const client = interaction.client as Bot;
 
         if (interaction.isChatInputCommand()) {
+            if (await RateLimiter.handleRateLimit(interaction)) return;
+
             const command = client.commands.get(interaction.commandName);
 
             if (!command) {
@@ -38,6 +41,8 @@ export default {
             }
         } else if (interaction.isModalSubmit() || interaction.isMessageComponent()) {
             if (interaction.customId.startsWith("$")) return;
+
+            if (await RateLimiter.handleRateLimit(interaction)) return;
 
             const customId = interaction.customId.split(";")[0];
             const component = client.components.get(customId);

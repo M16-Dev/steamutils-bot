@@ -51,22 +51,23 @@ deno task dev
 
 ```
 src/
-├── commands/          # Slash commands (auto-loaded)
+├── commands/               # Slash commands (auto-loaded)
 │   ├── ping.ts
 │   └── general/
 │       └── ping2.ts
-├── events/            # Discord events (auto-loaded)
+├── events/                 # Discord events (auto-loaded)
 │   ├── ready.ts
 │   └── interactionCreate.ts
-├── components/        # Interactive components (auto-loaded)
+├── components/             # Interactive components (auto-loaded)
 │   ├── buttons/
 │   ├── modals/
 │   └── select-menus/
-├── services/          # External APIs and business logic
-├── utils/             # Helper functions
-├── types/             # TypeScript type definitions
-├── loaders/           # Auto-loading system
-└── bot.ts             # Main bot class
+├── interactionHandlers/    # Interaction logic grouped and exported to functions for reuse  
+├── services/               # APIs and business logic
+├── utils/                  # Helper functions
+├── types/                  # TypeScript type definitions
+├── loaders/                # Auto-loading system
+└── bot.ts                  # Main bot class
 ```
 
 ### Adding New Features
@@ -123,6 +124,9 @@ export default {
     },
 } satisfies Component;
 ```
+
+You can also use MessageComponentCollectors for creating actions for components without defining them in /components. In such case, remember to prefix their
+customID with '$' to mark them as handled locally by MessageComponentCollector and to implement rate limiting.
 
 All files are automatically loaded on bot startup!
 
