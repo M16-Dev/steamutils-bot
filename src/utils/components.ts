@@ -109,7 +109,7 @@ export const createConnectionPublicComponent = () => {
             { type: 14 } satisfies APISeparatorComponent,
             {
                 type: 10,
-                content: ">>> **Link your Discord and Steam account.**\nClick the button below to generate your personal link.",
+                content: ">>> Link your Discord and Steam account.\nClick the button below to get a unique link:",
             } satisfies APITextDisplayComponent,
             { type: 14, divider: false, spacing: 2 } satisfies APISeparatorComponent,
             {
