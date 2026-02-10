@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, MessageFlags } from "discord.js";
+import { BaseGuildTextChannel, ChatInputCommandInteraction, MessageFlags } from "discord.js";
 import { manageGameServersComponent, steamConnectComponent } from "../utils/components.ts";
 import { config } from "../../config.ts";
 import client from "../services/backendClient.ts";
@@ -37,9 +37,15 @@ export const createSteamConnectHandler = async (interaction: ChatInputCommandInt
         return;
     }
 
-    await interaction.reply({
+    if (!(interaction.channel instanceof BaseGuildTextChannel)) return;
+
+    await interaction.channel.send({
         components: [steamConnectComponent((data as { code: string }).code, text)],
         flags: MessageFlags.IsComponentsV2,
+    });
+    await interaction.reply({
+        content: "Steam connect button created successfully.",
+        flags: MessageFlags.Ephemeral,
     });
 };
 

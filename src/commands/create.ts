@@ -1,6 +1,18 @@
-import { ChatInputCommandInteraction, MessageFlags, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
+import {
+    APIContainerComponent,
+    APITextDisplayComponent,
+    BaseGuildTextChannel,
+    ChatInputCommandInteraction,
+    MessageFlags,
+    PermissionFlagsBits,
+    SlashCommandBuilder,
+} from "discord.js";
 import { Command } from "../types/command.ts";
 import { createConnectionPublicComponent } from "../utils/components.ts";
+
+const PanelContentMapping: { [key: string]: (APIContainerComponent | APITextDisplayComponent)[] } = {
+    "connections_panel": [createConnectionPublicComponent()],
+};
 
 export default {
     data: new SlashCommandBuilder()
@@ -17,17 +29,16 @@ export default {
                 )
         ),
     async execute(interaction: ChatInputCommandInteraction): Promise<void> {
-        const type = interaction.options.getString("type", true);
+        const panelType = interaction.options.getString("type", true);
 
-        switch (type) {
-            case "connections_panel":
-                await interaction.reply({
-                    components: [createConnectionPublicComponent()],
-                    flags: MessageFlags.IsComponentsV2,
-                });
-                break;
-            default:
-                await interaction.reply({ content: "Unknown panel type.", flags: MessageFlags.Ephemeral });
+        if (!(interaction.channel instanceof BaseGuildTextChannel)) return;
+
+        const components = PanelContentMapping[panelType];
+        if (components) {
+            await interaction.channel.send({ components, flags: MessageFlags.IsComponentsV2 });
+            await interaction.reply({ content: "Panel created successfully.", flags: MessageFlags.Ephemeral });
+        } else {
+            await interaction.reply({ content: "Failed to create panel. Please try again later.", flags: MessageFlags.Ephemeral });
         }
     },
 } satisfies Command<ChatInputCommandInteraction>;
