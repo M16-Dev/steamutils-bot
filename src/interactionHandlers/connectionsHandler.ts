@@ -13,8 +13,8 @@ const key = await crypto.subtle.importKey(
 );
 
 export const createConnectionHandler = async (interaction: ButtonInteraction | ChatInputCommandInteraction): Promise<void> => {
-    const response = await client.api.v1.connections[":discordId"].$get({
-        param: { discordId: interaction.user.id },
+    const response = await client.api.v1.connections.$get({
+        query: { discordId: interaction.user.id },
     });
 
     if (!response.ok) {
@@ -25,7 +25,7 @@ export const createConnectionHandler = async (interaction: ButtonInteraction | C
         return;
     }
 
-    const { connections } = await response.json();
+    const { connections } = await response.json() as { connections: ConnectionWithGuild[] };
     if (connections.length >= config.connectionsLimit) {
         await interaction.reply({
             content:
@@ -51,15 +51,18 @@ export const createConnectionHandler = async (interaction: ButtonInteraction | C
     });
 };
 
-interface ConnectionRow {
+interface Connection {
     discord_id: string;
     steam_id: string;
-    guild_id: string;
     created_at: string;
 }
+interface ConnectionWithGuild extends Connection {
+    guild_id: string;
+}
+
 export const manageConnectionsHandler = async (interaction: ButtonInteraction | ChatInputCommandInteraction): Promise<void> => {
-    const response = await client.api.v1.connections[":discordId"].$get({
-        param: { discordId: interaction.user.id },
+    const response = await client.api.v1.connections.$get({
+        query: { discordId: interaction.user.id },
     });
 
     if (!response.ok) {
@@ -69,7 +72,7 @@ export const manageConnectionsHandler = async (interaction: ButtonInteraction | 
         });
         return;
     }
-    const connections: ConnectionRow[] = (await response.json()).connections;
+    const { connections } = await response.json() as { connections: ConnectionWithGuild[] };
 
     await interaction.reply({
         components: [await manageConnectionsComponent(interaction, connections.map((con) => ({ guildId: con.guild_id, steamId: con.steam_id })))],
