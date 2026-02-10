@@ -1,6 +1,7 @@
 import type { Event } from "../types/event.ts";
 import type { Bot } from "../bot.ts";
 import { logger } from "../utils/logger.ts";
+import { MessageFlags } from "discord.js";
 
 export default {
     name: "interactionCreate",
@@ -26,12 +27,12 @@ export default {
                 if (interaction.replied || interaction.deferred) {
                     await interaction.followUp({
                         content: errorMessage,
-                        ephemeral: true,
+                        flags: MessageFlags.Ephemeral,
                     });
                 } else {
                     await interaction.reply({
                         content: errorMessage,
-                        ephemeral: true,
+                        flags: MessageFlags.Ephemeral,
                     });
                 }
             }
