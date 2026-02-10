@@ -17,7 +17,7 @@ import SteamID from "steamid";
 import { getPlayerSummary } from "../services/steam.ts";
 import client from "../services/backendClient.ts";
 
-export const steamProfileComponent = (player: SteamPlayer) => {
+export const steamProfileComponent = (player: SteamPlayer, discordId: string | null) => {
     const steamId = new SteamID(player.steamid);
 
     return {
@@ -28,7 +28,9 @@ export const steamProfileComponent = (player: SteamPlayer) => {
                 components: [
                     {
                         type: 10,
-                        content: `# [${player.personaname}](${player.profileurl})\n**Last online:** <t:${player.lastlogoff}:R>`,
+                        content: `# [${player.personaname}](${player.profileurl})\n**Last online:** ${
+                            player.lastlogoff ? `<t:${player.lastlogoff}:R>` : "unknown"
+                        }\n**Discord:** ${discordId ? `<@${discordId}>` : "not linked"}`,
                     } satisfies APITextDisplayComponent,
                 ] satisfies APITextDisplayComponent[],
                 accessory: {

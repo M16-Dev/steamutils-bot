@@ -3,6 +3,7 @@ import { ChatInputCommandInteraction, MessageFlags, SlashCommandBuilder } from "
 import { getPlayerSummary, resolveVanityUrl } from "../services/steam.ts";
 import { steamProfileComponent } from "../utils/components.ts";
 import SteamID from "steamid";
+import client from "../services/backendClient.ts";
 
 export default {
     data: new SlashCommandBuilder()
@@ -61,8 +62,19 @@ export default {
             return;
         }
 
+        const discordId = await client.api.v1.connections.$get({
+            query: {
+                steamId: steamId.getSteamID64(),
+                guildId: interaction.guildId!,
+            },
+        }).then(async (res) => {
+            if (!res.ok) return null;
+            const { discordId } = await res.json() as { discordId: string | null };
+            return discordId;
+        });
+
         await interaction.reply({
-            components: [steamProfileComponent(profile)],
+            components: [steamProfileComponent(profile, discordId)],
             flags: MessageFlags.IsComponentsV2,
         });
     },
