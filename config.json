@@ -1,5 +1,6 @@
 {
     "rateLimitMax": 30,
     "rateLimitWindow": 60000,
-    "connectionsLimit": 10
+    "connectionsLimit": 10,
+    "maxTokensPerGuild": 3
 }

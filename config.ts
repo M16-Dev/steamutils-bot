@@ -11,9 +11,7 @@ const rawConfig = {
     jwtSecret: Deno.env.get("JWT_SECRET") as string | undefined,
     internalApiPort: Deno.env.get("INTERNAL_API_PORT") ?? 8081,
     internalApiKey: Deno.env.get("INTERNAL_API_KEY") as string | undefined,
-    rateLimitMax: json.rateLimitMax ?? 30,
-    rateLimitWindow: json.rateLimitWindow ?? 60000,
-    connectionsLimit: json.connectionsLimit ?? 10,
+    ...json,
 };
 
 const ConfigSchema = z.object({
@@ -29,6 +27,7 @@ const ConfigSchema = z.object({
     rateLimitMax: z.coerce.number().min(1),
     rateLimitWindow: z.coerce.number().min(1000),
     connectionsLimit: z.coerce.number().int().positive(),
+    maxTokensPerGuild: z.coerce.number().int().positive(),
 });
 
 const parseResult = ConfigSchema.safeParse(rawConfig);
