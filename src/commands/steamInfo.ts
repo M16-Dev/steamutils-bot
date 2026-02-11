@@ -11,71 +11,115 @@ export default {
         .setDescription("Get information about a Steam user")
         .addStringOption((option) =>
             option
-                .setName("user")
+                .setName("steam")
                 .setDescription("The Steam user to look up. Can be a username, SteamID or URL.")
-                .setRequired(true)
+                .setRequired(false)
+        )
+        .addUserOption((option) =>
+            option
+                .setName("discord")
+                .setDescription("The Discord user to look up the linked Steam account for.")
+                .setRequired(false)
         ),
     async execute(interaction: ChatInputCommandInteraction): Promise<void> {
-        let input = interaction.options.getString("user", true);
+        const steamInput = interaction.options.getString("steam");
+        const discordUser = interaction.options.getUser("discord");
 
-        if (input.includes("steamcommunity.com/")) {
-            const match = input.match(/steamcommunity\.com\/(?:id|profiles)\/([^\/]+)/);
-            input = match?.[1] ?? input;
-        }
+        await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-        const tryParseSteamId = (id: string): SteamID | null => {
-            try {
-                const steamId = new SteamID(id);
-                return steamId.isValid() ? steamId : null;
-            } catch {
-                return null;
-            }
-        };
-
-        let steamId = tryParseSteamId(input);
-
-        if (!steamId) {
-            const resolvedId = await resolveVanityUrl(input);
-            if (!resolvedId) {
-                await interaction.reply({
-                    content: `Could not find Steam user: ${input}`,
-                    flags: MessageFlags.Ephemeral,
-                });
-                return;
-            }
-            steamId = tryParseSteamId(resolvedId);
-            if (!steamId) {
-                await interaction.reply({
-                    content: `Invalid Steam ID returned: ${resolvedId}`,
-                    flags: MessageFlags.Ephemeral,
-                });
-                return;
-            }
-        }
-
-        const profile = await getPlayerSummary(steamId.getSteamID64());
-        if (!profile) {
-            await interaction.reply({
-                content: `Could not fetch profile for: ${input}`,
-                flags: MessageFlags.Ephemeral,
+        if (!!steamInput === !!discordUser) {
+            await interaction.editReply({
+                content: "Please provide either a Steam identifier OR a Discord user.",
             });
             return;
         }
 
-        const discordId = await client.api.v1.connections.$get({
-            query: {
-                steamId: steamId.getSteamID64(),
-                guildId: interaction.guildId!,
-            },
-        }).then(async (res) => {
-            if (!res.ok) return null;
-            const { discordId } = await res.json() as { discordId: string | null };
-            return discordId;
-        });
+        let targetSteamId64: string | null = null;
+        let linkedDiscordId: string | null = null;
 
-        await interaction.reply({
-            components: [steamProfileComponent(profile, discordId)],
+        if (discordUser) {
+            const res = await client.api.v1.connections.$get({
+                query: {
+                    discordId: discordUser.id,
+                    guildId: interaction.guildId!,
+                },
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                if ("steamId" in data && data.steamId) {
+                    targetSteamId64 = data.steamId;
+                    linkedDiscordId = discordUser.id;
+                }
+            }
+        } else if (steamInput) {
+            targetSteamId64 = await resolveSteamInput(steamInput);
+        }
+
+        if (!targetSteamId64) {
+            const msg = discordUser ? `No Steam account linked for <@${discordUser.id}> in this server.` : `Could not resolve Steam user: ${steamInput}`;
+
+            await interaction.editReply({ content: msg });
+            return;
+        }
+
+        if (!linkedDiscordId) {
+            const res = await client.api.v1.connections.$get({
+                query: {
+                    steamId: targetSteamId64,
+                    guildId: interaction.guildId!,
+                },
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                if ("discordId" in data && data.discordId) {
+                    linkedDiscordId = data.discordId;
+                }
+            }
+        }
+
+        const profile = await getPlayerSummary(targetSteamId64);
+
+        if (!profile) {
+            await interaction.editReply({
+                content: `Could not fetch Steam profile for ID: ${targetSteamId64}`,
+            });
+            return;
+        }
+
+        await interaction.editReply({
+            components: [steamProfileComponent(profile, linkedDiscordId)],
             flags: MessageFlags.IsComponentsV2,
         });
     },
 } satisfies Command<ChatInputCommandInteraction>;
+
+async function resolveSteamInput(input: string): Promise<string | null> {
+    // clean URL junk
+    if (input.includes("steamcommunity.com/")) {
+        const match = input.match(/steamcommunity\.com\/(?:id|profiles)\/([^\/]+)/);
+        input = match?.[1] ?? input;
+    }
+
+    // try parsing as direct steamID
+    try {
+        const steamId = new SteamID(input);
+        if (steamId.isValid()) return steamId.getSteamID64();
+    } catch {
+        // not a direct ID,  check vanity url
+    }
+
+    // resolve vanity url
+    const resolvedId = await resolveVanityUrl(input);
+    if (resolvedId) {
+        try {
+            const steamId = new SteamID(resolvedId);
+            return steamId.isValid() ? steamId.getSteamID64() : null;
+        } catch {
+            return null;
+        }
+    }
+
+    return null;
+}
