@@ -9,7 +9,7 @@ import {
 } from "discord.js";
 import { Command } from "../types/command.ts";
 import { createConnectionPublicComponent } from "../utils/components.ts";
-import { t } from "../utils/i18n.ts";
+import { getLocalizations, t } from "../utils/i18n.ts";
 
 const PanelContentMapping: { [key: string]: (locale: string) => (APIContainerComponent | APITextDisplayComponent)[] } = {
     "connections_panel": (locale) => [createConnectionPublicComponent(locale)],
@@ -18,15 +18,23 @@ const PanelContentMapping: { [key: string]: (locale: string) => (APIContainerCom
 export default {
     data: new SlashCommandBuilder()
         .setName("create")
-        .setDescription("Creates a new panel")
+        .setDescription(t("commands.create.description", "en"))
+        .setNameLocalizations(getLocalizations("commands.create.name"))
+        .setDescriptionLocalizations(getLocalizations("commands.create.description"))
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .addStringOption((option) =>
             option
                 .setName("type")
-                .setDescription("The type of panel to create")
+                .setDescription(t("commands.create.opt.type.description", "en"))
+                .setNameLocalizations(getLocalizations("commands.create.opt.type.name"))
+                .setDescriptionLocalizations(getLocalizations("commands.create.opt.type.description"))
                 .setRequired(true)
                 .setChoices(
-                    { name: "Link Account Panel", value: "connections_panel" },
+                    {
+                        name: t("commands.create.opt.type.choices.connectionsPanel", "en"),
+                        value: "connections_panel",
+                        name_localizations: getLocalizations("commands.create.opt.type.choices.connectionsPanel"),
+                    },
                 )
         ),
     async execute(interaction: ChatInputCommandInteraction): Promise<void> {

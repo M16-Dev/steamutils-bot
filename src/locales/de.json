@@ -94,5 +94,84 @@
             "header": "Für diesen Discord registrierte Spielserver:",
             "noServers": "Es sind keine Spielserver für diesen Discord registriert."
         }
+    },
+    "commands": {
+        "config": {
+            "name": "config",
+            "description": "Bot-Einstellungen konfigurieren"
+        },
+        "connections": {
+            "name": "connections",
+            "description": "Verwalten Sie Ihre verknüpften Konten",
+            "sub": {
+                "create": {
+                    "name": "create",
+                    "description": "Verknüpfen Sie Ihr Discord-Konto mit Ihrem Steam-Konto"
+                },
+                "manage": {
+                    "name": "manage",
+                    "description": "Verwalten Sie Ihre verknüpften Konten"
+                }
+            }
+        },
+        "create": {
+            "name": "create",
+            "description": "Erstellt ein neues Panel",
+            "opt": {
+                "type": {
+                    "name": "type",
+                    "description": "Die Art des zu erstellenden Panels",
+                    "choices": {
+                        "connectionsPanel": "Konto verknüpfen Panel"
+                    }
+                }
+            }
+        },
+        "steamconnect": {
+            "name": "steamconnect",
+            "description": "Erstellt einen Steam-Verbindungsbutton für Ihren Server",
+            "sub": {
+                "create": {
+                    "name": "create",
+                    "description": "Erstellen Sie einen Steam-Verbindungsbutton",
+                    "opt": {
+                        "ip": {
+                            "name": "ip",
+                            "description": "Die IP Ihres Servers"
+                        },
+                        "port": {
+                            "name": "port",
+                            "description": "Die Portnummer des Servers"
+                        },
+                        "password": {
+                            "name": "password",
+                            "description": "Das Passwort für den Server (falls vorhanden)"
+                        },
+                        "text": {
+                            "name": "text",
+                            "description": "Benutzerdefinierter Text neben dem Button. Psst... du kannst Markdown verwenden!"
+                        }
+                    }
+                },
+                "manage": {
+                    "name": "manage",
+                    "description": "Verwalten Sie Ihre bestehenden Steam-Verbindungscodes"
+                }
+            }
+        },
+        "steaminfo": {
+            "name": "steaminfo",
+            "description": "Informationen über einen Steam-Benutzer abrufen",
+            "opt": {
+                "steam": {
+                    "name": "steam",
+                    "description": "Suche nach Benutzername, SteamID oder Profil-URL."
+                },
+                "discord": {
+                    "name": "discord",
+                    "description": "Der Discord-Benutzer, für den das verknüpfte Steam-Konto nachgeschlagen werden soll."
+                }
+            }
+        }
     }
 }

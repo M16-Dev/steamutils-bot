@@ -4,22 +4,28 @@ import { getPlayerSummary, resolveVanityUrl } from "../services/steam.ts";
 import { steamProfileComponent } from "../utils/components.ts";
 import SteamID from "steamid";
 import client from "../services/backendClient.ts";
-import { t } from "../utils/i18n.ts";
+import { getLocalizations, t } from "../utils/i18n.ts";
 
 export default {
     data: new SlashCommandBuilder()
         .setName("steaminfo")
-        .setDescription("Get information about a Steam user")
+        .setDescription(t("commands.steaminfo.description", "en"))
+        .setNameLocalizations(getLocalizations("commands.steaminfo.name"))
+        .setDescriptionLocalizations(getLocalizations("commands.steaminfo.description"))
         .addStringOption((option) =>
             option
                 .setName("steam")
-                .setDescription("The Steam user to look up. Can be a username, SteamID or URL.")
+                .setDescription(t("commands.steaminfo.opt.steam.description", "en"))
+                .setNameLocalizations(getLocalizations("commands.steaminfo.opt.steam.name"))
+                .setDescriptionLocalizations(getLocalizations("commands.steaminfo.opt.steam.description"))
                 .setRequired(false)
         )
         .addUserOption((option) =>
             option
                 .setName("discord")
-                .setDescription("The Discord user to look up the linked Steam account for.")
+                .setDescription(t("commands.steaminfo.opt.discord.description", "en"))
+                .setNameLocalizations(getLocalizations("commands.steaminfo.opt.discord.name"))
+                .setDescriptionLocalizations(getLocalizations("commands.steaminfo.opt.discord.description"))
                 .setRequired(false)
         ),
     async execute(interaction: ChatInputCommandInteraction): Promise<void> {

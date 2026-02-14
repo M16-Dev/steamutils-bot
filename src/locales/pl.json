@@ -94,5 +94,84 @@
             "header": "Serwery zarejestrowane dla tego discorda:",
             "noServers": "Brak zarejestrowanych serwerów dla tego discorda."
         }
+    },
+    "commands": {
+        "config": {
+            "name": "config",
+            "description": "Skonfiguruj ustawienia bota"
+        },
+        "connections": {
+            "name": "connections",
+            "description": "Zarządzaj powiązanymi kontami",
+            "sub": {
+                "create": {
+                    "name": "create",
+                    "description": "Połącz konto Discord z kontem Steam"
+                },
+                "manage": {
+                    "name": "manage",
+                    "description": "Zarządzaj powiązanymi kontami"
+                }
+            }
+        },
+        "create": {
+            "name": "create",
+            "description": "Tworzy nowy panel",
+            "opt": {
+                "type": {
+                    "name": "type",
+                    "description": "Typ panelu do utworzenia",
+                    "choices": {
+                        "connectionsPanel": "Panel łączenia kont"
+                    }
+                }
+            }
+        },
+        "steamconnect": {
+            "name": "steamconnect",
+            "description": "Tworzy przycisk łączenia ze Steam dla twojego serwera",
+            "sub": {
+                "create": {
+                    "name": "create",
+                    "description": "Utwórz przycisk łączenia ze Steam",
+                    "opt": {
+                        "ip": {
+                            "name": "ip",
+                            "description": "Adres IP serwera"
+                        },
+                        "port": {
+                            "name": "port",
+                            "description": "Numer portu serwera"
+                        },
+                        "password": {
+                            "name": "password",
+                            "description": "Hasło do serwera (opcjonalne)"
+                        },
+                        "text": {
+                            "name": "tekst",
+                            "description": "Niestandardowy tekst obok przycisku. Psst... możesz używać markdown!"
+                        }
+                    }
+                },
+                "manage": {
+                    "name": "manage",
+                    "description": "Zarządzaj swoimi istniejącymi kodami połączeń"
+                }
+            }
+        },
+        "steaminfo": {
+            "name": "steaminfo",
+            "description": "Pobierz informacje o użytkowniku Steam",
+            "opt": {
+                "steam": {
+                    "name": "steam",
+                    "description": "Użytkownik Steam do sprawdzenia. Może to być nazwa użytkownika, SteamID lub URL."
+                },
+                "discord": {
+                    "name": "discord",
+                    "description": "Użytkownik Discord, dla którego sprawdzić powiązane konto Steam."
+                }
+            }
+        }
     }
 }

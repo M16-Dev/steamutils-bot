@@ -11,7 +11,7 @@ import { db } from "../services/db.ts";
 import RateLimiter from "../utils/rateLimiter.ts";
 import Client from "../services/backendClient.ts";
 import { config } from "../../config.ts";
-import { t } from "../utils/i18n.ts";
+import { getLocalizations, t } from "../utils/i18n.ts";
 
 const configComponent = async (interaction: ChatInputCommandInteraction) => {
     const verifiedRole = await db.getVerifiedRole(interaction.guildId as string);
@@ -151,7 +151,9 @@ const handleManageTokensInterface = async (interaction: MessageComponentInteract
 export default {
     data: new SlashCommandBuilder()
         .setName("config")
-        .setDescription("Configure bot settings")
+        .setDescription(t("commands.config.description", "en"))
+        .setNameLocalizations(getLocalizations("commands.config.name"))
+        .setDescriptionLocalizations(getLocalizations("commands.config.description"))
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
     async execute(interaction: ChatInputCommandInteraction) {
         const response = await interaction.reply({

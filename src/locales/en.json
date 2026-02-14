@@ -94,5 +94,84 @@
             "header": "Game Servers registered for this guild:",
             "noServers": "There are no game servers registered for this guild."
         }
+    },
+    "commands": {
+        "config": {
+            "name": "config",
+            "description": "Configure bot settings"
+        },
+        "connections": {
+            "name": "connections",
+            "description": "Manage your linked accounts",
+            "sub": {
+                "create": {
+                    "name": "create",
+                    "description": "Link your Discord account with your Steam account"
+                },
+                "manage": {
+                    "name": "manage",
+                    "description": "Manage your linked accounts"
+                }
+            }
+        },
+        "create": {
+            "name": "create",
+            "description": "Creates a new panel",
+            "opt": {
+                "type": {
+                    "name": "type",
+                    "description": "The type of panel to create",
+                    "choices": {
+                        "connectionsPanel": "Link Account Panel"
+                    }
+                }
+            }
+        },
+        "steamconnect": {
+            "name": "steamconnect",
+            "description": "Creates a Steam connect button for your server",
+            "sub": {
+                "create": {
+                    "name": "create",
+                    "description": "Create a Steam connect button",
+                    "opt": {
+                        "ip": {
+                            "name": "ip",
+                            "description": "The IP of your server"
+                        },
+                        "port": {
+                            "name": "port",
+                            "description": "The port number of the server"
+                        },
+                        "password": {
+                            "name": "password",
+                            "description": "The password for the server (if any)"
+                        },
+                        "text": {
+                            "name": "text",
+                            "description": "Custom label next to the button. Psst... you can use markdown here!"
+                        }
+                    }
+                },
+                "manage": {
+                    "name": "manage",
+                    "description": "Manage your existing Steam connect codes"
+                }
+            }
+        },
+        "steaminfo": {
+            "name": "steaminfo",
+            "description": "Get information about a Steam user",
+            "opt": {
+                "steam": {
+                    "name": "steam",
+                    "description": "The Steam user to look up. Can be a username, SteamID or URL."
+                },
+                "discord": {
+                    "name": "discord",
+                    "description": "The Discord user to look up the linked Steam account for."
+                }
+            }
+        }
     }
 }
