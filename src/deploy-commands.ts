@@ -17,6 +17,7 @@ try {
         await rest.put(Routes.applicationCommands(config.clientId), { body: commandsData });
         console.log("Deployed globally");
     }
+    Deno.exit(0);
 } catch (error) {
     logger.error("Failed to deploy commands", error);
     Deno.exit(1);
