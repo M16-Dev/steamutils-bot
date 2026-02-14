@@ -1,1 +1,98 @@
-{}
+{
+    "common": {
+        "server": "Server",
+        "password": "Password",
+        "code": "Code",
+        "error": "An error occurred. Please try again later.",
+        "delete": "Delete",
+        "deleted": "Deleted",
+        "prevPage": "Previous Page",
+        "nextPage": "Next Page",
+        "panelCreate": {
+            "success": "Panel created successfully.",
+            "error": "Failed to create panel. Please try again later."
+        }
+    },
+    "interaction": {
+        "commandError": "There was an error while executing this command!"
+    },
+    "rateLimit": {
+        "exceeded": "You are being rate limited. Please try again <t:{{retryTimestamp}}:R>."
+    },
+    "config": {
+        "header": "Config",
+        "verifiedRole": {
+            "header": "Role for verified users",
+            "placeholder": "Select a role or leave blank"
+        },
+        "tokens": {
+            "header": "Tokens"
+        },
+        "tokensPanel": {
+            "buttonLabel": "Manage Tokens",
+            "header": "Manage Tokens",
+            "noTokens": "You have no tokens.",
+            "delete": {
+                "error": "Failed to delete token. Please try again later."
+            },
+            "create": {
+                "label": "Create New Token",
+                "disabled": "Max Tokens Reached",
+                "error": "Failed to create token. Please try again later."
+            }
+        }
+    },
+    "steamInfo": {
+        "invalidInput": "Please provide either a Steam identifier OR a Discord user.",
+        "error": {
+            "noAccount": "No Steam account linked for <@{{discordId}}> in this server.",
+            "resolve": "Could not resolve Steam user: {{steamInput}}",
+            "fetch": "Could not fetch Steam profile for ID: {{SteamId}}"
+        },
+        "lastOnline": {
+            "label": "Last online: {{lastOnline}}",
+            "header": "Last online",
+            "unknown": "unknown"
+        },
+        "discord": {
+            "notLinked": "not linked"
+        }
+    },
+    "connections": {
+        "delete": {
+            "error": "Failed to delete connection. Please try again later."
+        },
+        "fetch": {
+            "error": "Failed to check existing connections. Please try again later."
+        },
+        "limitReached": "You have reached the maximum number of connections ({{limit}}). Please manage your existing connections before creating a new one.",
+        "create": {
+            "header": "Link your accounts!",
+            "info": "Link your Discord and Steam account.\nClick the button below to get a unique link:",
+            "buttonLabel": "Link Accounts",
+            "personalInfo": "- You will be redirected to official Steam login page (steamcommunity.com)\n- We only get your public Steam ID from Steam\n- Link expires in 10 minutes. Do not share this link!"
+        },
+        "manage": {
+            "header": "Connections for {{user}}",
+            "noConnections": "You have no connections."
+        }
+    },
+    "steamConnect": {
+        "error": {
+            "delete": "Failed to delete server code [`{{code}}`] and related resources. Please try again later.",
+            "fetch": "Failed to fetch your server codes. Please try again later.",
+            "create": "Failed to create connect code. Please try again later."
+        },
+        "invalidInput": "Provided data is invalid.",
+        "header": "Connect to the server!",
+        "buttonLabel": "Connect",
+        "create": {
+            "success": "Steam connect button created successfully!"
+        },
+        "manage": {
+            "noPassword": "No password set.",
+            "header": "Game Servers registered for this guild:",
+            "noServers": "There are no game servers registered for this guild."
+        }
+    }
+}

@@ -1,1 +1,98 @@
-{}
+{
+    "common": {
+        "server": "Serwer",
+        "password": "Hasło",
+        "code": "Kod",
+        "error": "Wystąpił błąd. Spróbuj ponownie później.",
+        "delete": "Usuń",
+        "deleted": "Usunięto",
+        "prevPage": "Poprzednia strona",
+        "nextPage": "Następna strona",
+        "panelCreate": {
+            "success": "Panel utworzony pomyślnie.",
+            "error": "Nie udało się utworzyć panelu. Spróbuj ponownie później."
+        }
+    },
+    "interaction": {
+        "commandError": "Wystąpił błąd podczas wykonywania tej komendy!"
+    },
+    "rateLimit": {
+        "exceeded": "Przekroczono limit zapytań. Spróbuj ponownie <t:{{retryTimestamp}}:R>."
+    },
+    "config": {
+        "header": "Konfiguracja",
+        "verifiedRole": {
+            "header": "Rola dla zweryfikowanych użytkowników",
+            "placeholder": "Wybierz rolę lub pozostaw puste"
+        },
+        "tokens": {
+            "header": "Tokeny"
+        },
+        "tokensPanel": {
+            "buttonLabel": "Zarządzaj Tokenami",
+            "header": "Zarządzaj Tokenami",
+            "noTokens": "Nie masz żadnych tokenów.",
+            "delete": {
+                "error": "Nie udało się usunąć tokena. Spróbuj ponownie później."
+            },
+            "create": {
+                "label": "Utwórz Nowy Token",
+                "disabled": "Osiągnięto Maksymalną Liczbę Tokenów",
+                "error": "Nie udało się utworzyć tokena. Spróbuj ponownie później."
+            }
+        }
+    },
+    "steamInfo": {
+        "invalidInput": "Podaj identyfikator Steam LUB użytkownika Discord.",
+        "error": {
+            "noAccount": "Brak konta Steam połączonego dla <@{{discordId}}> na tym serwerze.",
+            "resolve": "Nie można znaleźć użytkownika Steam: {{steamInput}}",
+            "fetch": "Nie można pobrać profilu Steam dla ID: {{SteamId}}"
+        },
+        "lastOnline": {
+            "label": "Ostatnio online: {{lastOnline}}",
+            "header": "Ostatnio online",
+            "unknown": "nieznany"
+        },
+        "discord": {
+            "notLinked": "niepołączone"
+        }
+    },
+    "connections": {
+        "delete": {
+            "error": "Nie udało się usunąć połączenia. Spróbuj ponownie później."
+        },
+        "fetch": {
+            "error": "Nie udało się sprawdzić istniejących połączeń. Spróbuj ponownie później."
+        },
+        "limitReached": "Osiągnąłeś maksymalną liczbę połączeń ({{limit}}). Zarządzaj swoimi istniejącymi połączeniami przed utworzeniem nowego.",
+        "create": {
+            "header": "Połącz swoje konta!",
+            "info": "Połącz swoje konto Discord i Steam.\nKliknij przycisk poniżej, aby uzyskać unikalny link:",
+            "buttonLabel": "Połącz Konta",
+            "personalInfo": "- Zostaniesz przekierowany na oficjalną stronę logowania Steam (steamcommunity.com)\n- Pobieramy tylko Twoje publiczne ID konta od Steam\n- Link wygasa w ciągu 10 minut. Nie udostępniaj tego linku!"
+        },
+        "manage": {
+            "header": "Połączenia dla {{user}}",
+            "noConnections": "Nie masz żadnych połączeń."
+        }
+    },
+    "steamConnect": {
+        "error": {
+            "delete": "Nie udało się usunąć kodu serwera [`{{code}}`] i powiązanych zasobów. Spróbuj ponownie później.",
+            "fetch": "Nie udało się pobrać kodów serwera. Spróbuj ponownie później.",
+            "create": "Nie udało się utworzyć kodu połączenia. Spróbuj ponownie później."
+        },
+        "invalidInput": "Podane dane są nieprawidłowe.",
+        "header": "Połącz się z serwerem!",
+        "buttonLabel": "Połącz",
+        "create": {
+            "success": "Przycisk połączenia Steam został utworzony pomyślnie!"
+        },
+        "manage": {
+            "noPassword": "Brak ustawionego hasła.",
+            "header": "Serwery zarejestrowane dla tego discorda:",
+            "noServers": "Brak zarejestrowanych serwerów dla tego discorda."
+        }
+    }
+}
