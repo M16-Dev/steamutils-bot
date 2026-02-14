@@ -1,0 +1,98 @@
+{
+    "common": {
+        "server": "Server",
+        "password": "Passwort",
+        "code": "Code",
+        "error": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.",
+        "delete": "Löschen",
+        "deleted": "Gelöscht",
+        "prevPage": "Vorherige Seite",
+        "nextPage": "Nächste Seite",
+        "panelCreate": {
+            "success": "Panel wurde erfolgreich erstellt.",
+            "error": "Panel konnte nicht erstellt werden. Bitte versuchen Sie es später erneut."
+        }
+    },
+    "interaction": {
+        "commandError": "Beim Ausführen dieses Befehls ist ein Fehler aufgetreten!"
+    },
+    "rateLimit": {
+        "exceeded": "Sie sind ratenbegrenzt. Bitte versuchen Sie es erneut <t:{{retryTimestamp}}:R>."
+    },
+    "config": {
+        "header": "Konfiguration",
+        "verifiedRole": {
+            "header": "Rolle für verifizierte Benutzer",
+            "placeholder": "Wählen Sie eine Rolle oder lassen Sie das Feld leer"
+        },
+        "tokens": {
+            "header": "Tokens"
+        },
+        "tokensPanel": {
+            "buttonLabel": "Tokens verwalten",
+            "header": "Tokens verwalten",
+            "noTokens": "Sie haben keine Tokens.",
+            "delete": {
+                "error": "Token konnte nicht gelöscht werden. Bitte versuchen Sie es später erneut."
+            },
+            "create": {
+                "label": "Neuen Token erstellen",
+                "disabled": "Maximale Anzahl an Tokens erreicht",
+                "error": "Token konnte nicht erstellt werden. Bitte versuchen Sie es später erneut."
+            }
+        }
+    },
+    "steamInfo": {
+        "invalidInput": "Bitte geben Sie entweder eine Steam-Kennung ODER einen Discord-Benutzer an.",
+        "error": {
+            "noAccount": "Für <@{{discordId}}> ist auf diesem Server kein Steam-Konto verknüpft.",
+            "resolve": "Steam-Benutzer konnte nicht aufgelöst werden: {{steamInput}}",
+            "fetch": "Steam-Profil für ID konnte nicht abgerufen werden: {{SteamId}}"
+        },
+        "lastOnline": {
+            "label": "Zuletzt online: {{lastOnline}}",
+            "header": "Zuletzt online",
+            "unknown": "unbekannt"
+        },
+        "discord": {
+            "notLinked": "nicht verknüpft"
+        }
+    },
+    "connections": {
+        "delete": {
+            "error": "Verbindung konnte nicht gelöscht werden. Bitte versuchen Sie es später erneut."
+        },
+        "fetch": {
+            "error": "Bestehende Verbindungen konnten nicht überprüft werden. Bitte versuchen Sie es später erneut."
+        },
+        "limitReached": "Sie haben die maximale Anzahl an Verbindungen ({{limit}}) erreicht. Bitte verwalten Sie Ihre bestehenden Verbindungen, bevor Sie eine neue erstellen.",
+        "create": {
+            "header": "Verknüpfen Sie Ihre Konten!",
+            "info": "Verknüpfen Sie Ihr Discord- und Steam-Konto.\nKlicken Sie auf den Button unten, um einen einzigartigen Link zu erhalten:",
+            "buttonLabel": "Konten verknüpfen",
+            "personalInfo": "- Sie werden zur offiziellen Steam-Login-Seite (steamcommunity.com) weitergeleitet\n- Wir erhalten nur Ihre öffentliche Steam-ID von Steam\n- Der Link läuft in 10 Minuten ab. Teilen Sie diesen Link nicht!"
+        },
+        "manage": {
+            "header": "Verbindungen für {{user}}",
+            "noConnections": "Sie haben keine Verbindungen."
+        }
+    },
+    "steamConnect": {
+        "error": {
+            "delete": "Server-Code [`{{code}}`] und zugehörige Ressourcen konnten nicht gelöscht werden. Bitte versuchen Sie es später erneut.",
+            "fetch": "Ihre Server-Codes konnten nicht abgerufen werden. Bitte versuchen Sie es später erneut.",
+            "create": "Verbindungscode konnte nicht erstellt werden. Bitte versuchen Sie es später erneut."
+        },
+        "invalidInput": "Die angegebenen Daten sind ungültig.",
+        "header": "Verbinden Sie sich mit dem Server!",
+        "buttonLabel": "Verbinden",
+        "create": {
+            "success": "Steam-Verbindungsbutton erfolgreich erstellt!"
+        },
+        "manage": {
+            "noPassword": "Kein Passwort festgelegt.",
+            "header": "Für diesen Discord registrierte Spielserver:",
+            "noServers": "Es sind keine Spielserver für diesen Discord registriert."
+        }
+    }
+}

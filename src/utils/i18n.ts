@@ -1,12 +1,14 @@
 import i18next from "@i18next/i18next";
 import pl from "../locales/pl.json" with { type: "json" };
 import en from "../locales/en.json" with { type: "json" };
+import de from "../locales/de.json" with { type: "json" };
 
 await i18next.init({
     fallbackLng: "en",
     resources: {
         en: { translation: en },
         pl: { translation: pl },
+        de: { translation: de },
     },
     interpolation: {
         escapeValue: false,
