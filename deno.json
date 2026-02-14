@@ -14,6 +14,7 @@
         "install-hooks": "deno run --allow-read --allow-write scripts/install-hooks.ts"
     },
     "imports": {
+        "@i18next/i18next": "jsr:@i18next/i18next@^25.8.7",
         "steamutils-backend": "./steamutils-backend/app.ts",
         "@hono/hono": "jsr:@hono/hono@^4.11.7",
         "@std/assert": "jsr:@std/assert@1",
