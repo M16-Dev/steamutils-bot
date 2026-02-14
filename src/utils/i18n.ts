@@ -8,9 +8,12 @@ await i18next.init({
         en: { translation: en },
         pl: { translation: pl },
     },
+    interpolation: {
+        escapeValue: false,
+    },
 });
 
-export function t(key: string, locale: string, variables = {}) {
+export function t(key: string, locale: string, variables = {}): string {
     const lang = locale.split("-")[0];
-    return i18next.t(key, { lng: lang, ...variables });
+    return i18next.t(key, { lng: lang, ...variables }) as string;
 }
