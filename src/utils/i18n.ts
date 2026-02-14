@@ -13,6 +13,7 @@ await i18next.init({
     interpolation: {
         escapeValue: false,
     },
+    showSupportNotice: false,
 });
 
 export function t(key: string, locale: string, variables = {}): string {
