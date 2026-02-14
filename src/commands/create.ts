@@ -9,9 +9,10 @@ import {
 } from "discord.js";
 import { Command } from "../types/command.ts";
 import { createConnectionPublicComponent } from "../utils/components.ts";
+import { t } from "../utils/i18n.ts";
 
-const PanelContentMapping: { [key: string]: (APIContainerComponent | APITextDisplayComponent)[] } = {
-    "connections_panel": [createConnectionPublicComponent()],
+const PanelContentMapping: { [key: string]: (locale: string) => (APIContainerComponent | APITextDisplayComponent)[] } = {
+    "connections_panel": (locale) => [createConnectionPublicComponent(locale)],
 };
 
 export default {
@@ -33,12 +34,18 @@ export default {
 
         if (!(interaction.channel instanceof BaseGuildTextChannel)) return;
 
-        const components = PanelContentMapping[panelType];
+        const components = PanelContentMapping[panelType](interaction.guildLocale ?? interaction.locale);
         if (components) {
             await interaction.channel.send({ components, flags: MessageFlags.IsComponentsV2 });
-            await interaction.reply({ content: "Panel created successfully.", flags: MessageFlags.Ephemeral });
+            await interaction.reply({
+                content: t("common.panelCreate.success", interaction.locale),
+                flags: MessageFlags.Ephemeral,
+            });
         } else {
-            await interaction.reply({ content: "Failed to create panel. Please try again later.", flags: MessageFlags.Ephemeral });
+            await interaction.reply({
+                content: t("common.panelCreate.error", interaction.locale),
+                flags: MessageFlags.Ephemeral,
+            });
         }
     },
 } satisfies Command<ChatInputCommandInteraction>;

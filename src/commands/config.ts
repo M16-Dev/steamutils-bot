@@ -11,6 +11,7 @@ import { db } from "../services/db.ts";
 import RateLimiter from "../utils/rateLimiter.ts";
 import Client from "../services/backendClient.ts";
 import { config } from "../../config.ts";
+import { t } from "../utils/i18n.ts";
 
 const configComponent = async (interaction: ChatInputCommandInteraction) => {
     const verifiedRole = await db.getVerifiedRole(interaction.guildId as string);
@@ -18,18 +19,18 @@ const configComponent = async (interaction: ChatInputCommandInteraction) => {
     return {
         type: 17,
         components: [
-            { type: 10, content: "# Config" },
+            { type: 10, content: `# ${t("config.header", interaction.locale)}` },
             { type: 14 },
             {
                 type: 10,
-                content: "### Role for verified users",
+                content: `### ${t("config.verifiedRole.header", interaction.locale)}`,
             },
             {
                 type: 1,
                 components: [
                     {
                         type: 6,
-                        placeholder: "Select a role or leave blank",
+                        placeholder: t("config.verifiedRole.placeholder", interaction.locale),
                         custom_id: "$config_verified_role",
                         min_values: 0,
                         max_values: 1,
@@ -43,13 +44,13 @@ const configComponent = async (interaction: ChatInputCommandInteraction) => {
                 components: [
                     {
                         type: 10,
-                        content: "### Tokens",
+                        content: `### ${t("config.tokens.header", interaction.locale)}`,
                     },
                 ],
                 accessory: {
                     type: 2,
                     style: 2,
-                    label: "Manage Tokens",
+                    label: t("config.tokensPanel.buttonLabel", interaction.locale),
                     custom_id: "$manage_tokens",
                 },
             },
@@ -57,16 +58,16 @@ const configComponent = async (interaction: ChatInputCommandInteraction) => {
     };
 };
 
-const tokensComponent = async (guildId: string) => {
+const tokensComponent = async (guildId: string, locale: string) => {
     const res = await Client.api.v1.tokens[":guildId"].$get({ param: { guildId } });
     const tokens = await res.json();
 
     return {
         type: 17,
         components: [
-            { type: 10, content: "# Manage Tokens" },
+            { type: 10, content: `# ${t("config.tokensPanel.header", locale)}` },
             { type: 14 },
-            ...(tokens.length === 0 ? [{ type: 10, content: "You have no tokens." }] : tokens.map((token) => ({
+            ...(tokens.length === 0 ? [{ type: 10, content: t("config.tokensPanel.noTokens", locale) }] : tokens.map((token) => ({
                 type: 9,
                 components: [
                     {
@@ -77,7 +78,7 @@ const tokensComponent = async (guildId: string) => {
                 accessory: {
                     type: 2,
                     style: 4,
-                    label: "Delete",
+                    label: t("common.delete", locale),
                     custom_id: `$delete_token;${token}`,
                 },
             }))),
@@ -87,7 +88,9 @@ const tokensComponent = async (guildId: string) => {
                     {
                         type: 2,
                         style: 3,
-                        label: tokens.length >= config.maxTokensPerGuild ? "Max Tokens Reached" : "Create New Token",
+                        label: tokens.length >= config.maxTokensPerGuild
+                            ? t("config.tokensPanel.create.disabled", locale)
+                            : t("config.tokensPanel.create.label", locale),
                         custom_id: "$create_token",
                         disabled: tokens.length >= config.maxTokensPerGuild,
                     },
@@ -99,14 +102,14 @@ const tokensComponent = async (guildId: string) => {
 
 const handleManageTokensInterface = async (interaction: MessageComponentInteraction) => {
     const response = await interaction.reply({
-        components: [await tokensComponent(interaction.guildId as string)],
+        components: [await tokensComponent(interaction.guildId as string, interaction.locale)],
         flags: MessageFlags.Ephemeral | MessageFlags.IsComponentsV2,
         withResponse: true,
     });
 
     if (!response.resource?.message) {
         await interaction.followUp({
-            content: "An error occurred while handling the configuration menu. Please try again later.",
+            content: t("common.error", interaction.locale),
             flags: MessageFlags.Ephemeral,
         });
         return;
@@ -121,24 +124,24 @@ const handleManageTokensInterface = async (interaction: MessageComponentInteract
                 const res = await Client.api.v1.tokens[":token"].$delete({ param: { token } });
                 if (!res.ok) {
                     await componentInteraction.reply({
-                        content: "Failed to delete token. Please try again later.",
+                        content: t("config.tokensPanel.delete.error", interaction.locale),
                         flags: MessageFlags.Ephemeral,
                     });
                     return;
                 }
-                await componentInteraction.update({ components: [await tokensComponent(interaction.guildId as string)] });
+                await componentInteraction.update({ components: [await tokensComponent(interaction.guildId as string, interaction.locale)] });
                 break;
             }
             case "$create_token": {
                 const res = await Client.api.v1.tokens.$post({ json: { guildId: interaction.guildId as string } });
                 if (!res.ok) {
                     await componentInteraction.reply({
-                        content: "Failed to create token. Please try again later.",
+                        content: t("config.tokensPanel.create.error", interaction.locale),
                         flags: MessageFlags.Ephemeral,
                     });
                     return;
                 }
-                await componentInteraction.update({ components: [await tokensComponent(interaction.guildId as string)] });
+                await componentInteraction.update({ components: [await tokensComponent(interaction.guildId as string, interaction.locale)] });
                 break;
             }
         }
@@ -159,7 +162,7 @@ export default {
 
         if (!response.resource?.message) {
             await interaction.followUp({
-                content: "An error occurred while handling the configuration menu. Please try again later.",
+                content: t("common.error", interaction.locale),
                 flags: MessageFlags.Ephemeral,
             });
             return;

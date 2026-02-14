@@ -9,6 +9,7 @@ import {
 } from "discord.js";
 import { Component } from "../../types/component.ts";
 import client from "../../services/backendClient.ts";
+import { t } from "../../utils/i18n.ts";
 
 export default {
     customId: "delete_game_server_button",
@@ -19,7 +20,7 @@ export default {
 
         if (!response.ok) {
             await interaction.reply({
-                content: `Failed to delete server code [\`${code}\`] and related resources. Please try again later.`,
+                content: t("steamConnect.error.delete", interaction.locale, { code }),
                 flags: MessageFlags.Ephemeral,
             });
             return;
@@ -36,7 +37,7 @@ export default {
         if (section) {
             (section.accessory as APIButtonComponent).disabled = true;
             (section.accessory as APIButtonComponent).style = ButtonStyle.Secondary;
-            (section.accessory as APIButtonComponentWithCustomId).label = "Deleted";
+            (section.accessory as APIButtonComponentWithCustomId).label = t("common.deleted", interaction.locale);
         }
 
         await interaction.update({

@@ -2,6 +2,7 @@ import { BaseGuildTextChannel, ChatInputCommandInteraction, MessageFlags } from 
 import { manageGameServersComponent, steamConnectComponent } from "../utils/components.ts";
 import { config } from "../../config.ts";
 import client from "../services/backendClient.ts";
+import { t } from "../utils/i18n.ts";
 
 export const createSteamConnectHandler = async (interaction: ChatInputCommandInteraction): Promise<void> => {
     const ip = interaction.options.getString("ip", true);
@@ -15,7 +16,7 @@ export const createSteamConnectHandler = async (interaction: ChatInputCommandInt
 
     if ((res.status as number) === 400) {
         await interaction.reply({
-            content: `❌ Provided data is invalid.`,
+            content: t("steamConnect.invalidInput", interaction.locale),
             flags: MessageFlags.Ephemeral,
         });
         return;
@@ -23,7 +24,7 @@ export const createSteamConnectHandler = async (interaction: ChatInputCommandInt
 
     if (res.status === 402) {
         await interaction.reply({
-            content: `❌ ${(data as { error: string }).error}`,
+            content: (data as { error: string }).error,
             flags: MessageFlags.Ephemeral,
         });
         return;
@@ -31,7 +32,7 @@ export const createSteamConnectHandler = async (interaction: ChatInputCommandInt
 
     if (!res.ok) {
         await interaction.reply({
-            content: "❌ Failed to create connect code. Please try again later.",
+            content: t("steamConnect.error.create", interaction.locale),
             flags: MessageFlags.Ephemeral,
         });
         return;
@@ -40,11 +41,11 @@ export const createSteamConnectHandler = async (interaction: ChatInputCommandInt
     if (!(interaction.channel instanceof BaseGuildTextChannel)) return;
 
     await interaction.channel.send({
-        components: [steamConnectComponent((data as { code: string }).code, text)],
+        components: [steamConnectComponent((data as { code: string }).code, interaction.guildLocale ?? interaction.locale, text)],
         flags: MessageFlags.IsComponentsV2,
     });
     await interaction.reply({
-        content: "Steam connect button created successfully.",
+        content: t("steamConnect.create.success", interaction.locale),
         flags: MessageFlags.Ephemeral,
     });
 };
@@ -58,7 +59,7 @@ export const manageSteamConnectHandler = async (interaction: ChatInputCommandInt
 
     if (!response.ok) {
         await interaction.reply({
-            content: `Failed to fetch your server codes. Please try again later.`,
+            content: t("steamConnect.error.fetch", interaction.locale),
             flags: MessageFlags.Ephemeral,
         });
         return;

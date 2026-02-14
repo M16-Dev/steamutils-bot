@@ -1,8 +1,9 @@
 import type { Event } from "../types/event.ts";
 import type { Bot } from "../bot.ts";
 import { logger } from "../utils/logger.ts";
-import { MessageFlags } from "discord.js";
+import { InteractionReplyOptions, MessageFlags, MessagePayload } from "discord.js";
 import RateLimiter from "../utils/rateLimiter.ts";
+import { t } from "../utils/i18n.ts";
 
 export default {
     name: "interactionCreate",
@@ -25,18 +26,15 @@ export default {
             } catch (error) {
                 logger.error(`Error executing command ${interaction.commandName}`, error);
 
-                const errorMessage = "There was an error while executing this command!";
+                const errorMessage = {
+                    content: t("interaction.commandError", interaction.locale),
+                    flags: MessageFlags.Ephemeral,
+                } satisfies string | MessagePayload | InteractionReplyOptions;
 
                 if (interaction.replied || interaction.deferred) {
-                    await interaction.followUp({
-                        content: errorMessage,
-                        flags: MessageFlags.Ephemeral,
-                    });
+                    await interaction.followUp(errorMessage);
                 } else {
-                    await interaction.reply({
-                        content: errorMessage,
-                        flags: MessageFlags.Ephemeral,
-                    });
+                    await interaction.reply(errorMessage);
                 }
             }
         } else if (interaction.isModalSubmit() || interaction.isMessageComponent()) {

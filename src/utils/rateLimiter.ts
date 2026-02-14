@@ -1,5 +1,6 @@
 import { Collection, CommandInteraction, MessageComponentInteraction, MessageFlags, ModalSubmitInteraction } from "discord.js";
 import { config } from "../../config.ts";
+import { t } from "./i18n.ts";
 
 type RepliableInteraction = MessageComponentInteraction | ModalSubmitInteraction | CommandInteraction;
 
@@ -39,7 +40,7 @@ class RateLimiter {
 
     async replyWithRateLimitInfo(interaction: RepliableInteraction, retryTimestamp: number) {
         await interaction.reply({
-            content: `You are being rate limited. Please try again <t:${retryTimestamp}:R>.`,
+            content: t("rateLimit.exceeded", interaction.locale, { retryTimestamp }),
             flags: MessageFlags.Ephemeral,
         });
     }

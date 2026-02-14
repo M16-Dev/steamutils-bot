@@ -3,6 +3,7 @@ import { create, getNumericDate } from "@wok/djwt";
 import { createConnectionPersonalComponent, manageConnectionsComponent } from "../utils/components.ts";
 import { config } from "../../config.ts";
 import client from "../services/backendClient.ts";
+import { t } from "../utils/i18n.ts";
 
 const key = await crypto.subtle.importKey(
     "raw",
@@ -19,7 +20,7 @@ export const createConnectionHandler = async (interaction: ButtonInteraction | C
 
     if (!response.ok) {
         await interaction.reply({
-            content: `Failed to check existing connections. Please try again later.`,
+            content: t("connections.fetch.error", interaction.locale),
             flags: MessageFlags.Ephemeral,
         });
         return;
@@ -28,8 +29,7 @@ export const createConnectionHandler = async (interaction: ButtonInteraction | C
     const { connections } = await response.json() as { connections: ConnectionWithGuild[] };
     if (connections.length >= config.connectionsLimit) {
         await interaction.reply({
-            content:
-                `You have reached the maximum number of connections (${config.connectionsLimit}). Please manage your existing connections before creating a new one.`,
+            content: t("connections.limitReached", interaction.locale, { limit: config.connectionsLimit }),
             flags: MessageFlags.Ephemeral,
         });
         return;
@@ -46,7 +46,7 @@ export const createConnectionHandler = async (interaction: ButtonInteraction | C
     );
 
     await interaction.reply({
-        components: [createConnectionPersonalComponent(token)],
+        components: [createConnectionPersonalComponent(token, interaction.locale)],
         flags: MessageFlags.Ephemeral | MessageFlags.IsComponentsV2,
     });
 };
@@ -67,7 +67,7 @@ export const manageConnectionsHandler = async (interaction: ButtonInteraction | 
 
     if (!response.ok) {
         await interaction.reply({
-            content: `Failed to fetch your connections. Please try again later.`,
+            content: t("connections.fetch.error", interaction.locale),
             flags: MessageFlags.Ephemeral,
         });
         return;

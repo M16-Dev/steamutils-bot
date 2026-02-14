@@ -16,8 +16,9 @@ import {
 import SteamID from "steamid";
 import { getPlayerSummary } from "../services/steam.ts";
 import client from "../services/backendClient.ts";
+import { t } from "./i18n.ts";
 
-export const steamProfileComponent = (player: SteamPlayer, discordId: string | null) => {
+export const steamProfileComponent = (player: SteamPlayer, discordId: string | null, locale: string) => {
     const steamId = new SteamID(player.steamid);
 
     return {
@@ -28,9 +29,9 @@ export const steamProfileComponent = (player: SteamPlayer, discordId: string | n
                 components: [
                     {
                         type: 10,
-                        content: `# [${player.personaname}](${player.profileurl})\n**Last online:** ${
-                            player.lastlogoff ? `<t:${player.lastlogoff}:R>` : "unknown"
-                        }\n**Discord:** ${discordId ? `<@${discordId}>` : "not linked"}`,
+                        content: `# [${player.personaname}](${player.profileurl})\n**${t("steamInfo.lastOnline.header", locale)}:** ${
+                            player.lastlogoff ? `<t:${player.lastlogoff}:R>` : t("steamInfo.lastOnline.unknown", locale)
+                        }\n**Discord:** ${discordId ? `<@${discordId}>` : t("steamInfo.discord.notLinked", locale)}`,
                     } satisfies APITextDisplayComponent,
                 ] satisfies APITextDisplayComponent[],
                 accessory: {
@@ -48,7 +49,7 @@ export const steamProfileComponent = (player: SteamPlayer, discordId: string | n
     } satisfies APIContainerComponent;
 };
 
-export const steamConnectComponent = (code: string, text?: string) => {
+export const steamConnectComponent = (code: string, locale: string, text?: string) => {
     return {
         type: 17,
         components: [
@@ -57,21 +58,21 @@ export const steamConnectComponent = (code: string, text?: string) => {
                 components: [
                     {
                         type: 10,
-                        content: text?.replace("\\n", "\n") ?? "### Connect to the server!",
+                        content: text?.replace("\\n", "\n") ?? `### ${t("steamConnect.header", locale)}`,
                     } satisfies APITextDisplayComponent,
                 ] satisfies APITextDisplayComponent[],
                 accessory: {
                     type: 2,
                     style: 5,
                     url: `${client.connect[":code"].$url({ param: { code } })}`,
-                    label: "Connect",
+                    label: t("steamConnect.buttonLabel", locale),
                 } satisfies APIButtonComponentWithURL,
             } satisfies APISectionComponent,
         ] satisfies APIComponentInContainer[],
     } satisfies APIContainerComponent;
 };
 
-export const createConnectionPersonalComponent = (token: string) => {
+export const createConnectionPersonalComponent = (token: string, locale: string) => {
     return {
         type: 17,
         components: [
@@ -80,38 +81,36 @@ export const createConnectionPersonalComponent = (token: string) => {
                 components: [
                     {
                         type: 10,
-                        content: "# Link your accounts!",
+                        content: `# ${t("connections.create.header", locale)}`,
                     } satisfies APITextDisplayComponent,
                 ] satisfies APITextDisplayComponent[],
                 accessory: {
                     type: 2,
                     style: 5,
                     url: `${client.connections.create.$url({ query: { token: encodeURIComponent(token) } })}`,
-                    label: "Link Accounts",
+                    label: t("connections.create.buttonLabel", locale),
                 } satisfies APIButtonComponentWithURL,
             } satisfies APISectionComponent,
             {
                 type: 10,
-                content: `>>> - You will be redirected to official Steam login page (steamcommunity.com)
-- We only get your public Steam ID from Steam
-- Link expires in 10 minutes. Do not share this link!`,
+                content: `>>> ${t("connections.create.personalInfo", locale)}`,
             } satisfies APITextDisplayComponent,
         ] satisfies APIComponentInContainer[],
     } satisfies APIContainerComponent;
 };
 
-export const createConnectionPublicComponent = () => {
+export const createConnectionPublicComponent = (locale: string) => {
     return {
         type: 17,
         components: [
             {
                 type: 10,
-                content: "# Link your accounts!",
+                content: `# ${t("connections.create.header", locale)}`,
             } satisfies APITextDisplayComponent,
             { type: 14 } satisfies APISeparatorComponent,
             {
                 type: 10,
-                content: ">>> Link your Discord and Steam account.\nClick the button below to get a unique link:",
+                content: `>>> ${t("connections.create.info", locale)}`,
             } satisfies APITextDisplayComponent,
             { type: 14, divider: false, spacing: 2 } satisfies APISeparatorComponent,
             {
@@ -121,7 +120,7 @@ export const createConnectionPublicComponent = () => {
                         type: 2,
                         style: ButtonStyle.Success,
                         custom_id: `create_connection_button`,
-                        label: "Link Accounts",
+                        label: t("connections.create.buttonLabel", locale),
                         emoji: { name: "🔗" },
                     } satisfies APIButtonComponentWithCustomId,
                 ] satisfies APIButtonComponentWithCustomId[],
@@ -130,19 +129,19 @@ export const createConnectionPublicComponent = () => {
     } satisfies APIContainerComponent;
 };
 
-const connectionComponent = (guildName: string | undefined, guildId: string, steamName: string | undefined, steamId: string) => {
+const connectionComponent = (guildName: string | undefined, guildId: string, steamName: string | undefined, steamId: string, locale: string) => {
     return {
         type: 9,
         accessory: {
             type: 2,
             style: 4,
-            label: "Delete",
+            label: t("common.delete", locale),
             custom_id: `delete_connection_button;${guildId}`,
         },
         components: [
             {
                 type: 10,
-                content: `>>> **Server: [${guildName ?? "ID: " + guildId}](https://discord.com/channels/${guildId})**
+                content: `>>> **${t("common.server", locale)}: [${guildName ?? "ID: " + guildId}](https://discord.com/channels/${guildId})**
 **Steam: [${steamName ?? "ID: " + steamId}](https://steamcommunity.com/profiles/${steamId})**`,
             },
         ],
@@ -162,7 +161,7 @@ export const manageConnectionsComponent = async (interaction: BaseInteraction, c
         components: [
             {
                 type: 10,
-                content: `## Connections for ${interaction.user}`,
+                content: `## ${t("connections.manage.header", interaction.locale, { user: interaction.user.toString() })}`,
             },
             { type: 14, spacing: 2 },
             ...connections.length
@@ -172,12 +171,13 @@ export const manageConnectionsComponent = async (interaction: BaseInteraction, c
                         connection.guildId,
                         (await getPlayerSummary(connection.steamId))?.personaname,
                         connection.steamId,
+                        interaction.locale,
                     )
                 ))
                 : [
                     {
                         type: 10,
-                        content: "You have no connections.",
+                        content: t("connections.manage.noConnections", interaction.locale),
                     },
                 ],
             ...connections.length > 10
@@ -189,14 +189,14 @@ export const manageConnectionsComponent = async (interaction: BaseInteraction, c
                             {
                                 type: 2,
                                 style: 2,
-                                label: "Previous Page",
+                                label: t("common.prevPage", interaction.locale),
                                 disabled: true,
                                 custom_id: "previous_page_manage_connections_button",
                             },
                             {
                                 type: 2,
                                 style: 2,
-                                label: "Next Page",
+                                label: t("common.nextPage", interaction.locale),
                                 custom_id: "next_page_manage_connections_button",
                             },
                         ],
@@ -214,27 +214,27 @@ type GameServerData = {
     password: string | null;
 };
 
-const gameServerComponent = (server: GameServerData) => {
+const gameServerComponent = (server: GameServerData, locale: string) => {
     return {
         type: 9,
         accessory: {
             type: 2,
             style: 4,
-            label: "Delete",
+            label: t("common.delete", locale),
             custom_id: `delete_game_server_button;${server.code}`,
         },
         components: [
             {
                 type: 10,
-                content: `>>> **Server:** \`${server.ip}:${server.port}\`\n**Password:** ${
-                    server.password ? server.password : "No password set."
-                }\n-# Code: \`${server.code}\``,
+                content: `>>> **${t("common.server", locale)}:** \`${server.ip}:${server.port}\`\n**${t("common.password", locale)}:** ${
+                    server.password ? server.password : t("steamConnect.manage.noPassword", locale)
+                }\n-# ${t("common.code", locale)}: \`${server.code}\``,
             },
         ],
     };
 };
 
-export const manageGameServersComponent = async (_interaction: BaseInteraction, servers: GameServerData[]) => {
+export const manageGameServersComponent = async (interaction: BaseInteraction, servers: GameServerData[]) => {
     return {
         type: 17,
         accent_color: null,
@@ -242,13 +242,13 @@ export const manageGameServersComponent = async (_interaction: BaseInteraction, 
         components: [
             {
                 type: 10,
-                content: `## Game Servers registered for this guild:`,
+                content: `## ${t("steamConnect.manage.header", interaction.locale)}`,
             },
             { type: 14, spacing: 2 },
-            ...servers.length ? await Promise.all(servers.map((server) => gameServerComponent(server))) : [
+            ...servers.length ? await Promise.all(servers.map((server) => gameServerComponent(server, interaction.locale))) : [
                 {
                     type: 10,
-                    content: "There are no game servers registered for this guild.",
+                    content: t("steamConnect.manage.noServers", interaction.locale),
                 },
             ],
             ...servers.length > 10
@@ -260,14 +260,14 @@ export const manageGameServersComponent = async (_interaction: BaseInteraction, 
                             {
                                 type: 2,
                                 style: 2,
-                                label: "Previous Page",
+                                label: t("common.prevPage", interaction.locale),
                                 disabled: true,
                                 custom_id: "previous_page_manage_game_servers_button",
                             },
                             {
                                 type: 2,
                                 style: 2,
-                                label: "Next Page",
+                                label: t("common.nextPage", interaction.locale),
                                 custom_id: "next_page_manage_game_servers_button",
                             },
                         ],

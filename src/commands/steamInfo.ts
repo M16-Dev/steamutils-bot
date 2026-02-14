@@ -4,6 +4,7 @@ import { getPlayerSummary, resolveVanityUrl } from "../services/steam.ts";
 import { steamProfileComponent } from "../utils/components.ts";
 import SteamID from "steamid";
 import client from "../services/backendClient.ts";
+import { t } from "../utils/i18n.ts";
 
 export default {
     data: new SlashCommandBuilder()
@@ -29,7 +30,7 @@ export default {
 
         if (!!steamInput === !!discordUser) {
             await interaction.editReply({
-                content: "Please provide either a Steam identifier OR a Discord user.",
+                content: t("steamInfo.invalidInput", interaction.locale),
             });
             return;
         }
@@ -57,7 +58,9 @@ export default {
         }
 
         if (!targetSteamId64) {
-            const msg = discordUser ? `No Steam account linked for <@${discordUser.id}> in this server.` : `Could not resolve Steam user: ${steamInput}`;
+            const msg = discordUser
+                ? t("steamInfo.error.noAccount", interaction.locale, { discordId: discordUser.id })
+                : t("steamInfo.error.resolve", interaction.locale, { steamInput });
 
             await interaction.editReply({ content: msg });
             return;
@@ -83,13 +86,13 @@ export default {
 
         if (!profile) {
             await interaction.editReply({
-                content: `Could not fetch Steam profile for ID: ${targetSteamId64}`,
+                content: t("steamInfo.error.fetch", interaction.locale, { SteamId: targetSteamId64 }),
             });
             return;
         }
 
         await interaction.editReply({
-            components: [steamProfileComponent(profile, linkedDiscordId)],
+            components: [steamProfileComponent(profile, linkedDiscordId, interaction.locale)],
             flags: MessageFlags.IsComponentsV2,
         });
     },

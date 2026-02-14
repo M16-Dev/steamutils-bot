@@ -11,6 +11,7 @@ import {
 import { Component } from "../../types/component.ts";
 import { db } from "../../services/db.ts";
 import client from "../../services/backendClient.ts";
+import { t } from "../../utils/i18n.ts";
 
 export default {
     customId: "delete_connection_button",
@@ -23,7 +24,7 @@ export default {
 
         if (!response.ok) {
             await interaction.reply({
-                content: `Failed to delete the connection. Please try again later.`,
+                content: t("connections.delete.error", interaction.locale),
                 flags: MessageFlags.Ephemeral,
             });
             return;
@@ -45,7 +46,7 @@ export default {
         if (section) {
             (section.accessory as APIButtonComponent).disabled = true;
             (section.accessory as APIButtonComponent).style = ButtonStyle.Secondary;
-            (section.accessory as APIButtonComponentWithCustomId).label = "Deleted";
+            (section.accessory as APIButtonComponentWithCustomId).label = t("common.deleted", interaction.locale);
         }
 
         await interaction.update({
