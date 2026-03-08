@@ -8,6 +8,7 @@
         "deleted": "Usunięto",
         "prevPage": "Poprzednia strona",
         "nextPage": "Następna strona",
+        "message": "Wiadomość",
         "panelCreate": {
             "success": "Panel utworzony pomyślnie.",
             "error": "Nie udało się utworzyć panelu. Spróbuj ponownie później."
@@ -172,6 +173,53 @@
                     "description": "Użytkownik Discord, dla którego sprawdzić powiązane konto Steam."
                 }
             }
+        },
+        "servertracker": {
+            "name": "servertracker",
+            "description": "Zarzadzaj i sledz serwery gier",
+            "sub": {
+                "create": {
+                    "name": "create",
+                    "description": "Uruchamia sledzenie i statystyki podanego serwera",
+                    "opt": {
+                        "ip": {
+                            "name": "ip",
+                            "description": "IP serwera"
+                        },
+                        "port": {
+                            "name": "port",
+                            "description": "Port Query serwera (np. 27015)"
+                        }
+                    }
+                },
+                "manage": {
+                    "name": "manage",
+                    "description": "Zarzadzaj monitorowanymi serwerami dla tego serwera Discord"
+                }
+            }
+        }
+    },
+    "serverTracker": {
+        "header": "{{name}}",
+        "players": "Gracze",
+        "map": "Mapa",
+        "status": "Status",
+        "online": "Online",
+        "offline": "Offline",
+        "lastUpdate": "Ostatnia aktualizacja",
+        "create": {
+            "success": "Zacząłeś monitorować serwer!",
+            "error": "Nie udało sie rozwiazac IP lub portu serwera.",
+            "alreadyTracked": "Ten serwer jest juz monitorowany na tym serwerze discord!",
+            "limitReached": "Osiagnieto maksymalna liczbe monitorowanych serwerow ({{limit}}) dla tego discorda. Usun istniejące monitorowane serwery przed dodaniem nowego."
+        },
+        "manage": {
+            "header": "Monitorowane serwery na tym Discordzie",
+            "noServers": "Brak monitorowanych serwerów."
+        },
+        "delete": {
+            "error": "Nie udało sie usunac serwera. Sprobuj ponownie.",
+            "success": "Monitorowanie serwera usuniete."
         }
     }
 }

@@ -8,6 +8,7 @@
         "deleted": "Gelöscht",
         "prevPage": "Vorherige Seite",
         "nextPage": "Nächste Seite",
+        "message": "Nachricht",
         "panelCreate": {
             "success": "Panel wurde erfolgreich erstellt.",
             "error": "Panel konnte nicht erstellt werden. Bitte versuchen Sie es später erneut."
@@ -172,6 +173,53 @@
                     "description": "Der Discord-Benutzer, für den das verknüpfte Steam-Konto nachgeschlagen werden soll."
                 }
             }
+        },
+        "servertracker": {
+            "name": "servertracker",
+            "description": "Überwache und verwalte Gameserver",
+            "sub": {
+                "create": {
+                    "name": "create",
+                    "description": "Verfolge Verbindungsdaten für einen bestimmten Server",
+                    "opt": {
+                        "ip": {
+                            "name": "ip",
+                            "description": "IP des Servers"
+                        },
+                        "port": {
+                            "name": "port",
+                            "description": "Query-Port des Servers (z. B. 27015)"
+                        }
+                    }
+                },
+                "manage": {
+                    "name": "manage",
+                    "description": "Verwalte überwachte Server für diesen Discord-Server"
+                }
+            }
+        }
+    },
+    "serverTracker": {
+        "header": "{{name}}",
+        "players": "Spieler",
+        "map": "Karte",
+        "status": "Status",
+        "online": "Online",
+        "offline": "Offline",
+        "lastUpdate": "Letztes Update",
+        "create": {
+            "success": "Server-Überwachung gestartet!",
+            "error": "Server-IP oder Port konnte nicht aufgelöst werden.",
+            "alreadyTracked": "Dieser Server wird auf diesem Discord-Server bereits überwacht!",
+            "limitReached": "Sie haben die maximale Anzahl an überwachten Servern erreicht ({{limit}}). Bitte verwalten Sie Ihre bestehenden überwachten Server, bevor Sie einen neuen hinzufügen."
+        },
+        "manage": {
+            "header": "Überwachte Server auf diesem Discord",
+            "noServers": "Es gibt keine überwachten Server."
+        },
+        "delete": {
+            "error": "Fehler beim Entfernen des Servers. Bitte erneut versuchen.",
+            "success": "Server-Überwachung entfernt."
         }
     }
 }

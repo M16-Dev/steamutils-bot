@@ -8,6 +8,7 @@
         "deleted": "Deleted",
         "prevPage": "Previous Page",
         "nextPage": "Next Page",
+        "message": "Message",
         "panelCreate": {
             "success": "Panel created successfully.",
             "error": "Failed to create panel. Please try again later."
@@ -172,6 +173,53 @@
                     "description": "The Discord user to look up the linked Steam account for."
                 }
             }
+        },
+        "servertracker": {
+            "name": "servertracker",
+            "description": "Track and manage game servers",
+            "sub": {
+                "create": {
+                    "name": "create",
+                    "description": "Track connection info for a specific game server",
+                    "opt": {
+                        "ip": {
+                            "name": "ip",
+                            "description": "IP of the server"
+                        },
+                        "port": {
+                            "name": "port",
+                            "description": "Query Port of the server (e.g., 27015)"
+                        }
+                    }
+                },
+                "manage": {
+                    "name": "manage",
+                    "description": "Manage tracked servers for this Discord server"
+                }
+            }
+        }
+    },
+    "serverTracker": {
+        "header": "{{name}}",
+        "players": "Players",
+        "map": "Map",
+        "status": "Status",
+        "online": "Online",
+        "offline": "Offline",
+        "lastUpdate": "Last updated",
+        "create": {
+            "success": "Server added to tracking list!",
+            "error": "Failed to resolve server IP or port.",
+            "alreadyTracked": "This server is already tracked on this server!",
+            "limitReached": "You have reached the maximum number of tracked servers ({{limit}}). Please manage your existing tracked servers before adding a new one."
+        },
+        "manage": {
+            "header": "Tracked Servers in this Discord",
+            "noServers": "There are no tracked servers."
+        },
+        "delete": {
+            "error": "Failed to untrack server. Please try again.",
+            "success": "Server tracking removed."
         }
     }
 }
