@@ -4,13 +4,24 @@ import QuickChart from "quickchart-js";
 // deno-lint-ignore no-explicit-any
 const qc = QuickChart as any;
 
+const getYMax = (historyMax: number, serverMax: number): number => {
+    if (historyMax) {
+        const rounded = 1 << (32 - Math.clz32(historyMax));
+        if (serverMax)
+            return Math.min(rounded, serverMax);
+        return rounded;
+    }
+    return serverMax
+}
+
 export async function generateChartBuffer(history: ServerHistoryEntry[], serverMaxPlayers: number): Promise<Uint8Array | null> {
     const chartData = history.map((h) => ({
         x: h.timestamp,
         y: h.players,
     }));
 
-    const dataMax: number = Math.max(...chartData.map((d) => d.y));
+    const historyMax: number = Math.max(...chartData.map((d) => d.y), 0);
+    const yMax: number = getYMax(historyMax, serverMaxPlayers);
 
     const chart = new qc();
     chart.setWidth(500);
@@ -39,9 +50,9 @@ export async function generateChartBuffer(history: ServerHistoryEntry[], serverM
             scales: {
                 y: {
                     min: 0,
-                    max: Math.min(serverMaxPlayers, 2 ** (Math.floor(Math.log2(Math.max(1, dataMax))) + 1)),
+                    max: yMax,
                     ticks: {
-                        stepSize: Math.ceil(serverMaxPlayers / 8),
+                        stepSize: Math.ceil(yMax / (yMax >= 20 ? 4 : 2)),
                     },
                     grid: {
                         display: false,
