@@ -8,12 +8,11 @@ import { t } from "../utils/i18n.ts";
 import { logger } from "../utils/logger.ts";
 
 export const createServerTrackerHandler = async (interaction: ChatInputCommandInteraction): Promise<void> => {
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+
     const channel = interaction.channel;
     if (!channel || !(channel instanceof TextChannel)) {
-        await interaction.reply({
-            content: t("common.error", interaction.locale),
-            flags: MessageFlags.Ephemeral,
-        });
+        await interaction.editReply(t("common.error", interaction.locale));
         return;
     }
 
@@ -22,29 +21,20 @@ export const createServerTrackerHandler = async (interaction: ChatInputCommandIn
 
     const currentSettings = await db.getTrackedServersForGuild(interaction.guildId!);
     if (currentSettings.some((s) => s.ip === ip && s.port === port)) {
-        await interaction.reply({
-            content: t("serverTracker.create.alreadyTracked", interaction.locale),
-            flags: MessageFlags.Ephemeral,
-        });
+        await interaction.editReply(t("serverTracker.create.alreadyTracked", interaction.locale));
         return;
     }
 
     const limit = 2;
     if (currentSettings.length >= limit) {
-        await interaction.reply({
-            content: t("serverTracker.create.limitReached", interaction.locale, { limit }),
-            flags: MessageFlags.Ephemeral,
-        });
+        await interaction.editReply(t("serverTracker.create.limitReached", interaction.locale, { limit }));
         return;
     }
 
     const serverInfo = await querySteamServer(ip, port);
 
     if (!serverInfo || serverInfo.name === "Offline") {
-        await interaction.reply({
-            content: t("serverTracker.create.error", interaction.locale),
-            flags: MessageFlags.Ephemeral,
-        });
+        await interaction.editReply(t("serverTracker.create.error", interaction.locale));
         return;
     }
 
@@ -60,10 +50,7 @@ export const createServerTrackerHandler = async (interaction: ChatInputCommandIn
         flags: MessageFlags.IsComponentsV2,
     });
 
-    await interaction.reply({
-        content: t("serverTracker.create.success", interaction.locale, { ip, port }),
-        flags: MessageFlags.Ephemeral,
-    });
+    await interaction.editReply(t("serverTracker.create.success", interaction.locale, { ip, port }));
 
     await db.trackServer({
         guildId: interaction.guildId!,
