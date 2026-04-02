@@ -8,7 +8,7 @@ import {
     SlashCommandBuilder,
 } from "discord.js";
 import { Command } from "../types/command.ts";
-import { createConnectionPublicComponent } from "../utils/components.ts";
+import { createConnectionPublicComponent } from "../ui/connections.ts";
 import { getLocalizations, t } from "../utils/i18n.ts";
 
 const PanelContentMapping: { [key: string]: (locale: string) => (APIContainerComponent | APITextDisplayComponent)[] } = {

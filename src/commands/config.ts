@@ -12,97 +12,18 @@ import RateLimiter from "../utils/rateLimiter.ts";
 import Client from "../services/backendClient.ts";
 import { config } from "../../config.ts";
 import { getLocalizations, t } from "../utils/i18n.ts";
+import { configComponent, tokensComponent } from "../ui/config.ts";
 
-const configComponent = async (interaction: ChatInputCommandInteraction) => {
-    const verifiedRole = await db.getVerifiedRole(interaction.guildId as string);
-
-    return {
-        type: 17,
-        components: [
-            { type: 10, content: `# ${t("config.header", interaction.locale)}` },
-            { type: 14 },
-            {
-                type: 10,
-                content: `### ${t("config.verifiedRole.header", interaction.locale)}`,
-            },
-            {
-                type: 1,
-                components: [
-                    {
-                        type: 6,
-                        placeholder: t("config.verifiedRole.placeholder", interaction.locale),
-                        custom_id: "$config_verified_role",
-                        min_values: 0,
-                        max_values: 1,
-                        default_values: verifiedRole ? [{ id: verifiedRole, type: "role" }] : [],
-                    },
-                ],
-            },
-            { type: 14 },
-            {
-                type: 9,
-                components: [
-                    {
-                        type: 10,
-                        content: `### ${t("config.tokens.header", interaction.locale)}`,
-                    },
-                ],
-                accessory: {
-                    type: 2,
-                    style: 2,
-                    label: t("config.tokensPanel.buttonLabel", interaction.locale),
-                    custom_id: "$manage_tokens",
-                },
-            },
-        ],
-    };
-};
-
-const tokensComponent = async (guildId: string, locale: string) => {
+const fetchTokens = async (guildId: string) => {
     const res = await Client.api.v1.tokens[":guildId"].$get({ param: { guildId } });
-    const tokens = await res.json();
-
-    return {
-        type: 17,
-        components: [
-            { type: 10, content: `# ${t("config.tokensPanel.header", locale)}` },
-            { type: 14 },
-            ...(tokens.length === 0 ? [{ type: 10, content: t("config.tokensPanel.noTokens", locale) }] : tokens.map((token) => ({
-                type: 9,
-                components: [
-                    {
-                        type: 10,
-                        content: `\`${token}\``,
-                    },
-                ],
-                accessory: {
-                    type: 2,
-                    style: 4,
-                    label: t("common.delete", locale),
-                    custom_id: `$delete_token;${token}`,
-                },
-            }))),
-            {
-                type: 1,
-                components: [
-                    {
-                        type: 2,
-                        style: 3,
-                        label: tokens.length >= config.maxTokensPerGuild
-                            ? t("config.tokensPanel.create.disabled", locale)
-                            : t("config.tokensPanel.create.label", locale),
-                        custom_id: "$create_token",
-                        disabled: tokens.length >= config.maxTokensPerGuild,
-                    },
-                ],
-            },
-        ],
-    };
+    return await res.json() as string[];
 };
 
 const handleManageTokensInterface = async (interaction: MessageComponentInteraction) => {
+    const tokens = await fetchTokens(interaction.guildId as string);
+
     const response = await interaction.reply({
-        components: [await tokensComponent(interaction.guildId as string, interaction.locale)],
+        components: [tokensComponent(tokens, interaction.locale)],
         flags: MessageFlags.Ephemeral | MessageFlags.IsComponentsV2,
         withResponse: true,
     });
@@ -129,7 +50,8 @@ const handleManageTokensInterface = async (interaction: MessageComponentInteract
                     });
                     return;
                 }
-                await componentInteraction.update({ components: [await tokensComponent(interaction.guildId as string, interaction.locale)] });
+                const updatedTokens = await fetchTokens(interaction.guildId as string);
+                await componentInteraction.update({ components: [tokensComponent(updatedTokens, interaction.locale)] });
                 break;
             }
             case "$create_token": {
@@ -141,7 +63,8 @@ const handleManageTokensInterface = async (interaction: MessageComponentInteract
                     });
                     return;
                 }
-                await componentInteraction.update({ components: [await tokensComponent(interaction.guildId as string, interaction.locale)] });
+                const updatedTokens = await fetchTokens(interaction.guildId as string);
+                await componentInteraction.update({ components: [tokensComponent(updatedTokens, interaction.locale)] });
                 break;
             }
         }
@@ -156,8 +79,9 @@ export default {
         .setDescriptionLocalizations(getLocalizations("commands.config.description"))
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
     async execute(interaction: ChatInputCommandInteraction) {
+        const verifiedRole = await db.getVerifiedRole(interaction.guildId as string);
         const response = await interaction.reply({
-            components: [await configComponent(interaction)],
+            components: [configComponent(verifiedRole, interaction.locale)],
             flags: MessageFlags.Ephemeral | MessageFlags.IsComponentsV2,
             withResponse: true,
         });

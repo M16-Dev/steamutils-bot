@@ -5,7 +5,7 @@ import { generateChartBuffer } from "./chart.ts";
 import { AttachmentBuilder, MessageFlags, TextChannel } from "discord.js";
 import { Buffer } from "node:buffer";
 import { logger } from "../utils/logger.ts";
-import { createTrackedServerComponent } from "../utils/components.ts";
+import { createTrackedServerComponent } from "../ui/serverTracker.ts";
 
 const UPDATE_INTERVAL_MS = 5 * 60 * 1000;
 const HISTORY_INTERVAL_MS = 15 * 60 * 1000;

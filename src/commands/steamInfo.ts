@@ -1,7 +1,7 @@
 import { Command } from "../types/command.ts";
 import { ChatInputCommandInteraction, MessageFlags, SlashCommandBuilder } from "discord.js";
 import { getPlayerSummary, resolveVanityUrl } from "../services/steam.ts";
-import { steamProfileComponent } from "../utils/components.ts";
+import { steamProfileComponent } from "../ui/steamInfo.ts";
 import SteamID from "steamid";
 import client from "../services/backendClient.ts";
 import { getLocalizations, t } from "../utils/i18n.ts";

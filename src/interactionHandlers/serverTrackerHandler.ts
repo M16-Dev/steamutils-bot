@@ -3,7 +3,7 @@ import { Buffer } from "node:buffer";
 import { db } from "../services/db.ts";
 import { querySteamServer } from "../services/serverQuery.ts";
 import { generateChartBuffer } from "../services/chart.ts";
-import { createTrackedServerComponent, manageTrackedServersComponent } from "../utils/components.ts";
+import { createTrackedServerComponent, manageTrackedServersComponent } from "../ui/serverTracker.ts";
 import { t } from "../utils/i18n.ts";
 import { logger } from "../utils/logger.ts";
 

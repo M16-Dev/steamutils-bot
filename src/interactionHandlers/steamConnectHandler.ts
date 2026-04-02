@@ -1,5 +1,5 @@
 import { BaseGuildTextChannel, ChatInputCommandInteraction, MessageFlags } from "discord.js";
-import { manageGameServersComponent, steamConnectComponent } from "../utils/components.ts";
+import { manageGameServersComponent, steamConnectComponent } from "../ui/steamConnect.ts";
 import { config } from "../../config.ts";
 import client from "../services/backendClient.ts";
 import { t } from "../utils/i18n.ts";
